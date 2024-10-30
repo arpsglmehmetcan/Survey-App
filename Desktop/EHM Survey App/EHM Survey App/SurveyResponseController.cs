@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;   
-
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -11,12 +8,7 @@ public class SurveyResponseController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly SmsService _smsService;
-    private string GenerateVerificationCode()
-    {
-        // Doğrulama kodu üretme 
-        var code = Random.Shared.Next(10000, 99999).ToString();
-        return code;
-    }
+
     public SurveyResponseController(AppDbContext context, SmsService smsService)
     {
         _context = context;
@@ -30,19 +22,21 @@ public class SurveyResponseController : ControllerBase
         // Anket yanıtını veritabanına kaydet
         var response = new SurveyResponse
         {
-            // kişisel bilgileri doldurur
-            PhoneNumber = request.PhoneNumber
+            PhoneNumber = request.PhoneNumber,
+            StoreCode = request.StoreCode,
+            Response = request.Response,
+            UserAgent = request.UserAgent,
+            IsVerified = false
         };
+
         _context.SurveyResponses.Add(response);
         await _context.SaveChangesAsync();
 
         // Doğrulama kodu gönder
-        var verificationCode = GenerateVerificationCode(); // Rastgele bir doğrulama kodu üret
-        var isSent = await _smsService.SendVerificationCode(response.PhoneNumber, verificationCode);
+        var isSent = await _smsService.SendVerificationCode(response.PhoneNumber);
 
         if (isSent)
         {
-            response.VerificationCode = verificationCode;
             await _context.SaveChangesAsync();
             return Ok(new { message = "Anket yanıtınız alındı ve doğrulama kodunuz gönderildi." });
         }
@@ -62,7 +56,7 @@ public class SurveyResponseController : ControllerBase
         if (response == null)
             return NotFound("Yanıt bulunamadı veya zaten doğrulanmış.");
 
-        bool isVerified = _smsService.VerifyCode(response.PhoneNumber, request.VerificationCode);
+        bool isVerified = await _smsService.VerifyCode(response.PhoneNumber, request.VerificationCode);
 
         if (isVerified)
         {

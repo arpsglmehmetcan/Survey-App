@@ -142,3 +142,9 @@ C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\ne
 C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\obj\Debug\net8.0\EHM Survey App.sourcelink.json
+C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\survey-app-frontend\package-lock.json
+C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\survey-app-frontend\package.json
+C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\survey-app-frontend\public\manifest.json
+C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\mehmetcanarapisaoglu\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Twilio.dll
