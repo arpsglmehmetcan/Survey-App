@@ -1,4 +1,3 @@
-// src/SurveyForm.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SurveyQuestion from './SurveyQuestion';
@@ -11,7 +10,7 @@ const SurveyForm = ({ storeCode }) => {
 
     useEffect(() => {
         // Store code’a göre soruları backend’den çek
-        axios.get(`http://localhost:5000/api/survey/${storeCode}`)
+        axios.get(`http://localhost:5139/api/survey/${storeCode}`)
             .then(response => setQuestions(response.data))
             .catch(error => console.error("Sorular yüklenirken hata oluştu:", error));
     }, [storeCode]);
@@ -27,7 +26,7 @@ const SurveyForm = ({ storeCode }) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await axios.post('http://localhost:5000/api/surveyresponse', {
+            await axios.post('http://localhost:5139/api/surveyresponse', {
                 storeCode,
                 responses,
                 phoneNumber,

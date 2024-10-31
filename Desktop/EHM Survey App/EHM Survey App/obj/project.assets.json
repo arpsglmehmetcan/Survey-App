@@ -5181,24 +5181,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\mehmetcanarapisaoglu\\.nuget\\packages\\": {}
+    "C:\\Users\\mehme\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mehmetcanarapisaoglu\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
+      "projectUniqueName": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
       "projectName": "EHM Survey App",
-      "projectPath": "C:\\Users\\mehmetcanarapisaoglu\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
-      "packagesPath": "C:\\Users\\mehmetcanarapisaoglu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mehmetcanarapisaoglu\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
+      "projectPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
+      "packagesPath": "C:\\Users\\mehme\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\mehmetcanarapisaoglu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\mehme\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

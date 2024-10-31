@@ -5,16 +5,25 @@ using Twilio.Rest.Verify.V2.Service;
 
 public class SmsService
 {
-    private readonly string _accountSid = "AC71b5d5fec00c39a77fe44f105af34edd"; // Twilio Account SID
-    private readonly string _authToken = "[AuthToken]"; // Twilio Auth Token
-    private readonly string _serviceSid = "VA11c801d896feab2ea5cdc5b23e35b128"; // Twilio Service SID (Verify Service)
+    private readonly string _accountSid = "AC0207641989a64e367119ae3b8862ea94"; // Twilio Account SID
+    private readonly string _authToken = "[a051594efe1b2cc77d24a6b4e7109c7a]"; // Twilio Auth Token
+    private readonly string _serviceSid = "VA8f5aad99b864f899aba55ebe582e38df"; // Twilio Service SID (Verify Service)
 
     public SmsService()
     {
         TwilioClient.Init(_accountSid, _authToken);
     }
 
-    public async Task<bool> SendVerificationCode(string phoneNumber)
+    // Doğrulama kodu gönderim sonucu için SmsResult sınıfı
+    public class SmsResult
+    {
+        public bool IsSuccessful { get; set; }
+        public string? ErrorMessage { get; set; } = string.Empty; // Nullable hale getirildi
+    }
+
+
+    // Doğrulama kodu gönder
+    public async Task<SmsResult> SendVerificationCode(string phoneNumber)
     {
         try
         {
@@ -25,16 +34,25 @@ public class SmsService
             );
 
             Console.WriteLine($"Verification SID: {verification.Sid}");
-            return verification.Status == "pending";
+            return new SmsResult
+            {
+                IsSuccessful = verification.Status == "beklemede", // pending -> beklemede
+                ErrorMessage = null
+            };
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Hata oluştu: {ex.Message}");
-            return false;
+            return new SmsResult
+            {
+                IsSuccessful = false,
+                ErrorMessage = ex.Message
+            };
         }
     }
 
-    public async Task<bool> VerifyCode(string phoneNumber, string verificationCode)
+    // Doğrulama kodunu kontrol et
+    public async Task<SmsResult> VerifyCode(string phoneNumber, string verificationCode)
     {
         try
         {
@@ -44,12 +62,20 @@ public class SmsService
                 pathServiceSid: _serviceSid
             );
 
-            return verificationCheck.Status == "approved";
+            return new SmsResult
+            {
+                IsSuccessful = verificationCheck.Status == "onaylandı", // approved -> onaylandı
+                ErrorMessage = null
+            };
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Hata oluştu: {ex.Message}");
-            return false;
+            return new SmsResult
+            {
+                IsSuccessful = false,
+                ErrorMessage = ex.Message
+            };
         }
     }
 }

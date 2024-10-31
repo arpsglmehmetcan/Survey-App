@@ -33,16 +33,16 @@ public class SurveyResponseController : ControllerBase
         await _context.SaveChangesAsync();
 
         // Doğrulama kodu gönder
-        var isSent = await _smsService.SendVerificationCode(response.PhoneNumber);
+        var smsResult = await _smsService.SendVerificationCode(response.PhoneNumber);
 
-        if (isSent)
+        if (smsResult.IsSuccessful)
         {
             await _context.SaveChangesAsync();
             return Ok(new { message = "Anket yanıtınız alındı ve doğrulama kodunuz gönderildi." });
         }
         else
         {
-            return StatusCode(500, "Doğrulama kodu gönderilirken bir hata oluştu.");
+            return StatusCode(500, $"Doğrulama kodu gönderilirken bir hata oluştu: {smsResult.ErrorMessage}");
         }
     }
 
@@ -56,15 +56,15 @@ public class SurveyResponseController : ControllerBase
         if (response == null)
             return NotFound("Yanıt bulunamadı veya zaten doğrulanmış.");
 
-        bool isVerified = await _smsService.VerifyCode(response.PhoneNumber, request.VerificationCode);
+        var smsResult = await _smsService.VerifyCode(response.PhoneNumber, request.VerificationCode);
 
-        if (isVerified)
+        if (smsResult.IsSuccessful)
         {
             response.IsVerified = true;
             await _context.SaveChangesAsync();
             return Ok("SMS doğrulandı ve sonuç kaydedildi.");
         }
 
-        return BadRequest("Geçersiz doğrulama kodu.");
+        return BadRequest($"Geçersiz doğrulama kodu: {smsResult.ErrorMessage}");
     }
 }
