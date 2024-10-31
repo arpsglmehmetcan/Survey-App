@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{B9A6BC42-E139-4BBA-BA69-24FDDEB2EE07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EHM Survey App", "EHM Survey App", "{1CC926EC-3072-406D-BB08-2A10C7D58104}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHM Survey App", "Desktop\EHM Survey App\EHM Survey App\EHM Survey App.csproj", "{1ED6B174-B8C6-4A47-9E11-D0BBF71FBD7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1ED6B174-B8C6-4A47-9E11-D0BBF71FBD7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ED6B174-B8C6-4A47-9E11-D0BBF71FBD7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ED6B174-B8C6-4A47-9E11-D0BBF71FBD7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ED6B174-B8C6-4A47-9E11-D0BBF71FBD7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1CC926EC-3072-406D-BB08-2A10C7D58104} = {B9A6BC42-E139-4BBA-BA69-24FDDEB2EE07}
+		{1ED6B174-B8C6-4A47-9E11-D0BBF71FBD7D} = {1CC926EC-3072-406D-BB08-2A10C7D58104}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {23CF2D39-DBD6-4F43-B32F-8D2760CD5CA4}
+	EndGlobalSection
+EndGlobal
