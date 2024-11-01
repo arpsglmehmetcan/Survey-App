@@ -1,4 +1,3 @@
-// src/SurveyQuestion.js
 import React from 'react';
 
 const SurveyQuestion = ({ question, onResponseChange }) => {
@@ -9,18 +8,56 @@ const SurveyQuestion = ({ question, onResponseChange }) => {
     return (
         <div>
             <label>{question.question}</label>
-            {question.questionType === 'radio' ? (
+            {question.questionType === 'radio' && (
                 <div>
-                    {/* Varsayım: Radio button seçenekleri (Evet, Hayır) */}
-                    <label>
-                        <input type="radio" value="Evet" name={question.surveyId} onChange={handleChange} /> Evet
-                    </label>
-                    <label>
-                        <input type="radio" value="Hayır" name={question.surveyId} onChange={handleChange} /> Hayır
-                    </label>
+                    {question.options.map((option, index) => (
+                        <label key={index}>
+                            <input
+                                type="radio"
+                                value={option}
+                                name={question.surveyId}
+                                onChange={handleChange}
+                            />
+                            {option}
+                        </label>
+                    ))}
                 </div>
-            ) : (
-                <input type="text" onChange={handleChange} />
+            )}
+            {question.questionType === 'checkbox' && (
+                <div>
+                    {question.options.map((option, index) => (
+                        <label key={index}>
+                            <input
+                                type="checkbox"
+                                value={option}
+                                name={question.surveyId}
+                                onChange={(e) => {
+                                    const selectedOptions = responses[question.surveyId] || [];
+                                    if (e.target.checked) {
+                                        onResponseChange(question.surveyId, [...selectedOptions, option]);
+                                    } else {
+                                        onResponseChange(question.surveyId, selectedOptions.filter(item => item !== option));
+                                    }
+                                }}
+                            />
+                            {option}
+                        </label>
+                    ))}
+                </div>
+            )}
+            {question.questionType === 'rating' && (
+                <input
+                    type="number"
+                    min="1"
+                    max="10"
+                    onChange={handleChange}
+                />
+            )}
+            {question.questionType === 'text' && (
+                <input
+                    type="text"
+                    onChange={handleChange}
+                />
             )}
         </div>
     );

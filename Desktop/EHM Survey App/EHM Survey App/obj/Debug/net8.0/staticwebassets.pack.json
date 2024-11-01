@@ -245,6 +245,18 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\wwwroot\\qrcodes\\STORE123_qrcode.png",
+      "PackagePath": "staticwebassets\\qrcodes\\STORE123_qrcode.png"
+    },
+    {
+      "Id": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\wwwroot\\qrcodes\\STORE456_qrcode.png",
+      "PackagePath": "staticwebassets\\qrcodes\\STORE456_qrcode.png"
+    },
+    {
+      "Id": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\wwwroot\\qrcodes\\STORE789_qrcode.png",
+      "PackagePath": "staticwebassets\\qrcodes\\STORE789_qrcode.png"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EHM Survey App.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

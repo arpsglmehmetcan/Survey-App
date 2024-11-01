@@ -1,13 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Survey
 {
     [Key] // Primary key olarak belirtin
     public int SurveyId { get; set; }
     
-    [Required(ErrorMessage = "Mağaza kodu gerekli")]
-    public string StoreCode { get; set; } = string.Empty;
+    [ForeignKey("Store")]
+    public int StoreId { get; set; } // Mağaza kimliği
     
+    public Store? Store { get; set; } // Nullable yapıldı
+
     [Required(ErrorMessage = "Anket soruları gerekli")]
     public string Question { get; set; } = string.Empty;
     

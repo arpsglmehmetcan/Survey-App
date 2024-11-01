@@ -23,7 +23,7 @@ public class SurveyResponseController : ControllerBase
         var response = new SurveyResponse
         {
             PhoneNumber = request.PhoneNumber,
-            StoreCode = request.StoreCode,
+            StoreId = request.StoreId,
             Response = request.Response,
             UserAgent = request.UserAgent,
             IsVerified = false
