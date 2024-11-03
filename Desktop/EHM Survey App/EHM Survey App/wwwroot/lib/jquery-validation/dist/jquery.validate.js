@@ -1592,8 +1592,8 @@ $.extend( $.validator, {
 				dataType: "json",
 				data: data,
 				context: validator.currentForm,
-				success: function( response ) {
-					var valid = response === true || response === "true",
+				success: function( Response ) {
+					var valid = Response === true || Response === "true",
 						errors, message, submitted;
 
 					validator.settings.messages[ element.name ][ method ] = previous.originalMessage;
@@ -1607,7 +1607,7 @@ $.extend( $.validator, {
 						validator.showErrors();
 					} else {
 						errors = {};
-						message = response || validator.defaultMessage( element, { method: method, parameters: value } );
+						message = Response || validator.defaultMessage( element, { method: method, parameters: value } );
 						errors[ element.name ] = previous.message = message;
 						validator.invalid[ element.name ] = true;
 						validator.showErrors( errors );

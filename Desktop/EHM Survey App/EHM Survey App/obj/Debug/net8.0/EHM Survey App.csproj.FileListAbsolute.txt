@@ -147,3 +147,14 @@ C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App
 C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\obj\Debug\net8.0\EHM Survey App.pdb
 C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\obj\Debug\net8.0\EHM Survey App.genruntimeconfig.cache
 C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\obj\Debug\net8.0\ref\EHM Survey App.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.AspNetCore.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.Extensions.Hosting.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.Extensions.Logging.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.Formatting.Compact.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.Settings.Configuration.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.Sinks.Console.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.Sinks.Debug.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\Serilog.Sinks.File.dll
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\FRONT-END\build\asset-manifest.json
+C:\Users\mehme\Documents\GitHub\Survey-App\Desktop\EHM Survey App\EHM Survey App\bin\Debug\net8.0\FRONT-END\build\manifest.json

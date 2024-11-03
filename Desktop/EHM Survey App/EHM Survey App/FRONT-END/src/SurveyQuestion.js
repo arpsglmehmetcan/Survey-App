@@ -1,21 +1,21 @@
 import React from 'react';
 
-const SurveyQuestion = ({ question, onResponseChange }) => {
+const SurveyQuestion = ({ Question, onResponseChange }) => {
     const handleChange = (e) => {
-        onResponseChange(question.surveyId, e.target.value);
+        onResponseChange(Question.SurveyId, e.target.value);
     };
 
     return (
         <div>
-            <label>{question.question}</label>
-            {question.questionType === 'radio' && (
+            <label>{Question.Question}</label>
+            {Question.QuestionType === 'radio' && (
                 <div>
-                    {question.options.map((option, index) => (
+                    {Question.options.map((option, index) => (
                         <label key={index}>
                             <input
                                 type="radio"
                                 value={option}
-                                name={question.surveyId}
+                                name={Question.SurveyId}
                                 onChange={handleChange}
                             />
                             {option}
@@ -23,20 +23,20 @@ const SurveyQuestion = ({ question, onResponseChange }) => {
                     ))}
                 </div>
             )}
-            {question.questionType === 'checkbox' && (
+            {Question.QuestionType === 'checkbox' && (
                 <div>
-                    {question.options.map((option, index) => (
+                    {Question.options.map((option, index) => (
                         <label key={index}>
                             <input
                                 type="checkbox"
                                 value={option}
-                                name={question.surveyId}
+                                name={Question.SurveyId}
                                 onChange={(e) => {
-                                    const selectedOptions = responses[question.surveyId] || [];
+                                    const selectedOptions = Question.selectedOptions || [];
                                     if (e.target.checked) {
-                                        onResponseChange(question.surveyId, [...selectedOptions, option]);
+                                        onResponseChange(Question.SurveyId, [...selectedOptions, option]);
                                     } else {
-                                        onResponseChange(question.surveyId, selectedOptions.filter(item => item !== option));
+                                        onResponseChange(Question.SurveyId, selectedOptions.filter(item => item !== option));
                                     }
                                 }}
                             />
@@ -45,7 +45,7 @@ const SurveyQuestion = ({ question, onResponseChange }) => {
                     ))}
                 </div>
             )}
-            {question.questionType === 'rating' && (
+            {Question.QuestionType === 'rating' && (
                 <input
                     type="number"
                     min="1"
@@ -53,7 +53,7 @@ const SurveyQuestion = ({ question, onResponseChange }) => {
                     onChange={handleChange}
                 />
             )}
-            {question.questionType === 'text' && (
+            {Question.QuestionType === 'text' && (
                 <input
                     type="text"
                     onChange={handleChange}

@@ -5,8 +5,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog yapılandırmasını appsettings.json'dan okuma
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -17,25 +25,36 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add custom services
 builder.Services.AddScoped<SmsService>();
-builder.Services.AddScoped<QRCodeGeneratorService>(provider => new QRCodeGeneratorService("http://192.168.1.33:5139/survey"));
+builder.Services.AddScoped<QRCodeGeneratorService>(provider => 
+    new QRCodeGeneratorService("http://192.168.1.33:5139/api/survey"));
+
+// Configure CORS to allow all origins, methods, and headers
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
-// QR kodları üretmek için bir servis oluşturun ve veritabanından mağaza kodlarını alın
+// Generate QR codes for each store on startup
 using (var scope = app.Services.CreateScope())
 {
     var qrCodeService = scope.ServiceProvider.GetRequiredService<QRCodeGeneratorService>();
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    // Veritabanından mağaza kodlarını çekiyoruz
-    var storeCodes = dbContext.Stores.Select(s => s.StoreCode).ToList(); // 'Stores' ve 'StoreCode' veritabanınızda mağaza kodlarını tuttuğunuz tablo ve sütun isimleri olmalı
+    var storeCodes = dbContext.Stores.Select(s => s.StoreCode).ToList();
 
-    foreach (var storeCode in storeCodes)
+    foreach (var StoreCode in storeCodes)
     {
         try
         {
-            qrCodeService.GenerateQRCode(storeCode);
-            Console.WriteLine($"{storeCode} için QR kod başarıyla oluşturuldu.");
+            qrCodeService.GenerateQRCode(StoreCode);
+            Console.WriteLine($"{StoreCode} için QR kod başarıyla oluşturuldu.");
         }
         catch (Exception ex)
         {
@@ -44,7 +63,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -54,9 +73,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("AllowAllOrigins"); // Apply the CORS policy
 app.UseAuthorization();
 
-// Ağdan erişim sağlamak için tüm IP'lerden gelen istekleri kabul edecek şekilde ayarlıyoruz.
+// Allow external access
 app.Urls.Add("http://0.0.0.0:5139");
 
 app.MapControllerRoute(

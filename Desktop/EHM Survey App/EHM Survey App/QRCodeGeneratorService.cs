@@ -8,15 +8,18 @@ public class QRCodeGeneratorService
 
     public QRCodeGeneratorService(string baseUrl)
     {
-        _baseUrl = baseUrl; // Örneğin: "http://192.168.1.33:5139/survey"
+        _baseUrl = baseUrl; // Bu URL front-end uygulamanızın ana adresi olmalı, örneğin "http://192.168.1.33:3000"
     }
 
-    public void GenerateQRCode(string storeCode)
+    public void GenerateQRCode(string StoreCode)
     {
+        // Önce tam URL'yi oluşturuyoruz
+        string url = $"{_baseUrl}/survey/{StoreCode}";
+
         // Python betiğini çalıştırma
         string pythonScript = "generate_qr.py";
-        string pythonPath = @"C:\Users\mehme\AppData\Local\Programs\Python\Python312\python.exe"; // Python'un kurulu olduğu tam yolu belirtin
-        string arguments = $"{pythonScript} {storeCode}";
+        string pythonPath = @"C:\Users\mehme\AppData\Local\Programs\Python\Python312\python.exe";
+        string arguments = $"{pythonScript} \"{url}\""; // Python betiğine tam URL'yi geçiyoruz
 
         ProcessStartInfo start = new ProcessStartInfo
         {
@@ -44,9 +47,7 @@ public class QRCodeGeneratorService
         }
 
         // QR kodunu kaydetmek için dosya yolu oluşturma
-        string filePath = Path.Combine("wwwroot", "qrcodes", $"{storeCode}_qrcode.png");
-
-        // wwwroot/qrcodes dizini yoksa oluştur
+        string filePath = Path.Combine("wwwroot", "qrcodes", $"{StoreCode}_qrcode.png");
         Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException("Directory adı alınamadı."));
     }
 }

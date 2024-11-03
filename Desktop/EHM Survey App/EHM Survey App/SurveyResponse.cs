@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class SurveyResponse
 {
-    [Key] // Primary key olarak belirtin
+    [Key]
     public int ResponseId { get; set; }
     
     [ForeignKey("Survey")]
     public int SurveyId { get; set; }
 
     [ForeignKey("Store")]
-    public int StoreId { get; set; } // Mağaza kimliği
-    public Store? Store { get; set; } // Nullable yapıldı
+    public int StoreId { get; set; }
+    public Store? Store { get; set; }
 
     [Required(ErrorMessage = "Soruların cevaplanması gerekiyor")]
     public string Response { get; set; } = string.Empty;

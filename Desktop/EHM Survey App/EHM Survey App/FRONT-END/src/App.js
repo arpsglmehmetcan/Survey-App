@@ -1,12 +1,17 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 
 function App() {
     return (
-        <div className="App">
-            <h1>Müşteri Memnuniyet Anketi</h1>
-            <SurveyForm storeCode="STORE123" />
-        </div>
+        <Router>
+            <div className="App">
+                <h1>Müşteri Memnuniyet Anketi</h1>
+                <Routes>
+                    <Route path="/survey/:StoreCode" element={<SurveyForm />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 

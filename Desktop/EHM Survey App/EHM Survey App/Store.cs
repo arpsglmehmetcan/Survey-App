@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 public class Store
 {
-    [Key] // Primary key olarak belirtin
+    [Key] 
     public int StoreId { get; set; }
     
     [Required(ErrorMessage = "Mağaza kodu gerekli")]

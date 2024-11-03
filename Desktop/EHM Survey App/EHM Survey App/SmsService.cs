@@ -5,30 +5,27 @@ using Twilio.Rest.Verify.V2.Service;
 
 public class SmsService
 {
-    private readonly string _accountSid = "AC0207641989a64e367119ae3b8862ea94"; // Twilio Account SID
-    private readonly string _authToken = "[a051594efe1b2cc77d24a6b4e7109c7a]"; // Twilio Auth Token
-    private readonly string _serviceSid = "VA8f5aad99b864f899aba55ebe582e38df"; // Twilio Service SID (Verify Service)
+    private readonly string _accountSid = "AC0207641989a64e367119ae3b8862ea94";
+    private readonly string _authToken = "[a051594efe1b2cc77d24a6b4e7109c7a]";
+    private readonly string _serviceSid = "VA8f5aad99b864f899aba55ebe582e38df";
 
     public SmsService()
     {
         TwilioClient.Init(_accountSid, _authToken);
     }
 
-    // Doğrulama kodu gönderim sonucu için SmsResult sınıfı
     public class SmsResult
     {
         public bool IsSuccessful { get; set; }
-        public string? ErrorMessage { get; set; } = string.Empty; // Nullable hale getirildi
+        public string? ErrorMessage { get; set; } = string.Empty;
     }
 
-
-    // Doğrulama kodu gönder
-    public async Task<SmsResult> SendVerificationCode(string phoneNumber)
+    public async Task<SmsResult> SendVerificationCode(string PhoneNumber)
     {
         try
         {
             var verification = await VerificationResource.CreateAsync(
-                to: phoneNumber,
+                to: PhoneNumber,
                 channel: "sms",
                 pathServiceSid: _serviceSid
             );
@@ -36,7 +33,7 @@ public class SmsService
             Console.WriteLine($"Verification SID: {verification.Sid}");
             return new SmsResult
             {
-                IsSuccessful = verification.Status == "beklemede", // pending -> beklemede
+                IsSuccessful = verification.Status == "pending",
                 ErrorMessage = null
             };
         }
@@ -51,20 +48,19 @@ public class SmsService
         }
     }
 
-    // Doğrulama kodunu kontrol et
-    public async Task<SmsResult> VerifyCode(string phoneNumber, string verificationCode)
+    public async Task<SmsResult> VerifyCode(string PhoneNumber, string VerificationCode)
     {
         try
         {
             var verificationCheck = await VerificationCheckResource.CreateAsync(
-                to: phoneNumber,
-                code: verificationCode,
+                to: PhoneNumber,
+                code: VerificationCode,
                 pathServiceSid: _serviceSid
             );
 
             return new SmsResult
             {
-                IsSuccessful = verificationCheck.Status == "onaylandı", // approved -> onaylandı
+                IsSuccessful = verificationCheck.Status == "approved",
                 ErrorMessage = null
             };
         }

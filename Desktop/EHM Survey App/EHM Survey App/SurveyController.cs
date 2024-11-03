@@ -17,11 +17,10 @@ public class SurveyController : ControllerBase
         _qrCodeGeneratorService = qrCodeGeneratorService;
     }
 
-    // Mağaza koduna göre anketleri getirir
-    [HttpGet("get-surveys/{storeCode}")]
-    public async Task<ActionResult<IEnumerable<Survey>>> GetSurveyByStore(string storeCode)
+    [HttpGet("get-surveys/{StoreCode}")]
+    public async Task<ActionResult<IEnumerable<Survey>>> GetSurveyByStore(string StoreCode)
     {
-        var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreCode == storeCode);
+        var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreCode == StoreCode);
         if (store == null)
         {
             return NotFound("Bu mağaza koduna sahip mağaza bulunamadı.");
@@ -39,33 +38,31 @@ public class SurveyController : ControllerBase
         return Ok(surveys);
     }
 
-    // Anket cevabını kaydeder
-    [HttpPost("submit-response")]
-    public async Task<ActionResult<SurveyResponse>> SubmitSurveyResponse(SurveyResponse response)
+    [HttpPost("submit-Response")]
+    public async Task<ActionResult<SurveyResponse>> SubmitSurveyResponse(SurveyResponse Response)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var store = await _context.Stores.FindAsync(response.StoreId);
+        var store = await _context.Stores.FindAsync(Response.StoreId);
         if (store == null)
         {
             return NotFound("Mağaza bulunamadı.");
         }
 
-        response.SubmissonDate = DateTime.UtcNow;
-        _context.SurveyResponses.Add(response);
+        Response.SubmissonDate = DateTime.UtcNow;
+        _context.SurveyResponses.Add(Response);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetSurveyByStore), new { storeCode = store.StoreCode }, response);
+        return CreatedAtAction(nameof(GetSurveyByStore), new { StoreCode = store.StoreCode }, Response);
     }
 
-    // QR kod oluşturur
-    [HttpGet("generate-qrcode/{storeCode}")]
-    public async Task<IActionResult> GenerateQRCode(string storeCode)
+    [HttpGet("generate-qrcode/{StoreCode}")]
+    public async Task<IActionResult> GenerateQRCode(string StoreCode)
     {
-        var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreCode == storeCode);
+        var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreCode == StoreCode);
         if (store == null)
         {
             return NotFound("Mağaza bulunamadı.");

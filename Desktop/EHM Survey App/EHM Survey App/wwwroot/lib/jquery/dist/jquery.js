@@ -5607,7 +5607,7 @@ jQuery.event = {
 };
 
 // Ensure the presence of an event listener that handles manually-triggered
-// synthetic events by interrupting progress until reinvoked in response to
+// synthetic events by interrupting progress until reinvoked in Response to
 // *native* events that it fires directly, ensuring that state changes have
 // already occurred before other listeners are invoked.
 function leverageNative( el, type, expectSync ) {
@@ -9125,7 +9125,7 @@ function ajaxExtend( target, src ) {
 
 /* Handles responses to an ajax request:
  * - finds the right dataType (mediates between content-type and expected dataType)
- * - returns the corresponding response
+ * - returns the corresponding Response
  */
 function ajaxHandleResponses( s, jqXHR, responses ) {
 
@@ -9151,7 +9151,7 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 		}
 	}
 
-	// Check to see if we have a response for the expected dataType
+	// Check to see if we have a Response for the expected dataType
 	if ( dataTypes[ 0 ] in responses ) {
 		finalDataType = dataTypes[ 0 ];
 	} else {
@@ -9173,7 +9173,7 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 
 	// If we found a dataType
 	// We add the dataType to the list if needed
-	// and return the corresponding response
+	// and return the corresponding Response
 	if ( finalDataType ) {
 		if ( finalDataType !== dataTypes[ 0 ] ) {
 			dataTypes.unshift( finalDataType );
@@ -9182,10 +9182,10 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 	}
 }
 
-/* Chain conversions given the request and the original response
+/* Chain conversions given the request and the original Response
  * Also sets the responseXXX fields on the jqXHR instance
  */
-function ajaxConvert( s, response, jqXHR, isSuccess ) {
+function ajaxConvert( s, Response, jqXHR, isSuccess ) {
 	var conv2, current, conv, tmp, prev,
 		converters = {},
 
@@ -9205,12 +9205,12 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 	while ( current ) {
 
 		if ( s.responseFields[ current ] ) {
-			jqXHR[ s.responseFields[ current ] ] = response;
+			jqXHR[ s.responseFields[ current ] ] = Response;
 		}
 
 		// Apply the dataFilter if provided
 		if ( !prev && isSuccess && s.dataFilter ) {
-			response = s.dataFilter( response, s.dataType );
+			Response = s.dataFilter( Response, s.dataType );
 		}
 
 		prev = current;
@@ -9223,7 +9223,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 
 				current = prev;
 
-			// Convert response if prev dataType is non-auto and differs from current
+			// Convert Response if prev dataType is non-auto and differs from current
 			} else if ( prev !== "*" && prev !== current ) {
 
 				// Seek a direct converter
@@ -9262,10 +9262,10 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 
 					// Unless errors are allowed to bubble, catch and return them
 					if ( conv && s.throws ) {
-						response = conv( response );
+						Response = conv( Response );
 					} else {
 						try {
-							response = conv( response );
+							Response = conv( Response );
 						} catch ( e ) {
 							return {
 								state: "parsererror",
@@ -9278,7 +9278,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 		}
 	}
 
-	return { state: "success", data: response };
+	return { state: "success", data: Response };
 }
 
 jQuery.extend( {
@@ -9475,7 +9475,7 @@ jQuery.extend( {
 					return this;
 				},
 
-				// Overrides response content-type header
+				// Overrides Response content-type header
 				overrideMimeType: function( type ) {
 					if ( completed == null ) {
 						s.mimeType = type;
@@ -9702,7 +9702,7 @@ jQuery.extend( {
 
 		// Callback for when everything is done
 		function done( status, nativeStatusText, responses, headers ) {
-			var isSuccess, success, error, response, modified,
+			var isSuccess, success, error, Response, modified,
 				statusText = nativeStatusText;
 
 			// Ignore repeat invocations
@@ -9721,7 +9721,7 @@ jQuery.extend( {
 			// (no matter how long the jqXHR object will be used)
 			transport = undefined;
 
-			// Cache response headers
+			// Cache Response headers
 			responseHeadersString = headers || "";
 
 			// Set readyState
@@ -9730,9 +9730,9 @@ jQuery.extend( {
 			// Determine if successful
 			isSuccess = status >= 200 && status < 300 || status === 304;
 
-			// Get response data
+			// Get Response data
 			if ( responses ) {
-				response = ajaxHandleResponses( s, jqXHR, responses );
+				Response = ajaxHandleResponses( s, jqXHR, responses );
 			}
 
 			// Use a noop converter for missing script but not if jsonp
@@ -9743,7 +9743,7 @@ jQuery.extend( {
 			}
 
 			// Convert no matter what (that way responseXXX fields are always set)
-			response = ajaxConvert( s, response, jqXHR, isSuccess );
+			Response = ajaxConvert( s, Response, jqXHR, isSuccess );
 
 			// If successful, handle type chaining
 			if ( isSuccess ) {
@@ -9770,9 +9770,9 @@ jQuery.extend( {
 
 				// If we have data, let's convert it
 				} else {
-					statusText = response.state;
-					success = response.data;
-					error = response.error;
+					statusText = Response.state;
+					success = Response.data;
+					error = Response.error;
 					isSuccess = !error;
 				}
 			} else {
@@ -9874,14 +9874,14 @@ jQuery._evalUrl = function( url, options, doc ) {
 		async: false,
 		global: false,
 
-		// Only evaluate the response if it is successful (gh-4126)
+		// Only evaluate the Response if it is successful (gh-4126)
 		// dataFilter is not invoked for failure responses, so using it instead
 		// of the default converter is kludgy but it works.
 		converters: {
 			"text script": function() {}
 		},
-		dataFilter: function( response ) {
-			jQuery.globalEval( response, options, doc );
+		dataFilter: function( Response ) {
+			jQuery.globalEval( Response, options, doc );
 		}
 	} );
 };
@@ -10063,7 +10063,7 @@ jQuery.ajaxTransport( function( options ) {
 									// For XHR2 non-text, let the caller handle it (gh-2498)
 									( xhr.responseType || "text" ) !== "text"  ||
 									typeof xhr.responseText !== "string" ?
-										{ binary: xhr.response } :
+										{ binary: xhr.Response } :
 										{ text: xhr.responseText },
 									xhr.getAllResponseHeaders()
 								);
@@ -10275,7 +10275,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 				oldCallbacks.push( callbackName );
 			}
 
-			// Call if it was a function and we have a response
+			// Call if it was a function and we have a Response
 			if ( responseContainer && isFunction( overwritten ) ) {
 				overwritten( responseContainer[ 0 ] );
 			}
@@ -10358,7 +10358,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
  * Load a url into a page
  */
 jQuery.fn.load = function( url, params, callback ) {
-	var selector, type, response,
+	var selector, type, Response,
 		self = this,
 		off = url.indexOf( " " );
 
@@ -10392,8 +10392,8 @@ jQuery.fn.load = function( url, params, callback ) {
 			data: params
 		} ).done( function( responseText ) {
 
-			// Save response for use in complete callback
-			response = arguments;
+			// Save Response for use in complete callback
+			Response = arguments;
 
 			self.html( selector ?
 
@@ -10405,11 +10405,11 @@ jQuery.fn.load = function( url, params, callback ) {
 				responseText );
 
 		// If the request succeeds, this function gets "data", "status", "jqXHR"
-		// but they are ignored because response was set above.
+		// but they are ignored because Response was set above.
 		// If it fails, this function gets "jqXHR", "status", "error"
 		} ).always( callback && function( jqXHR, status ) {
 			self.each( function() {
-				callback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );
+				callback.apply( this, Response || [ jqXHR.responseText, status, jqXHR ] );
 			} );
 		} );
 	}

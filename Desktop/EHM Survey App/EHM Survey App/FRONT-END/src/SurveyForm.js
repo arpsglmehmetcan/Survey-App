@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import SurveyQuestion from './SurveyQuestion';
 
-const SurveyForm = ({ storeCode }) => {
+const SurveyForm = () => {
+    const { StoreCode } = useParams();
+    console.log('StoreCode:', StoreCode); // Konsola yazdırarak kontrol edin
     const [questions, setQuestions] = useState([]);
     const [responses, setResponses] = useState({});
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [PhoneNumber, setPhoneNumber] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showPhoneVerification, setShowPhoneVerification] = useState(false); // Telefon doğrulama aşamasını kontrol etmek için yeni state
+    const [showPhoneVerification, setShowPhoneVerification] = useState(false);
+
+    const baseURL = 'http://192.168.1.33:5139/api';
 
     useEffect(() => {
-        axios.get(`http://localhost:5139/api/survey/${storeCode}`)
-            .then(response => setQuestions(response.data))
-            .catch(error => console.error("Sorular yüklenirken hata oluştu:", error));
-    }, [storeCode]);
+        const fetchQuestions = async () => {
+            try {
+                const Response = await axios.get(`${baseURL}/survey/get-surveys/${StoreCode}`);
+                setQuestions(Response.data);
+                console.log("Anket Soruları:", Response.data); // Anket sorularını da kontrol edin
+            } catch (error) {
+                console.error("Sorular yüklenirken hata oluştu:", error);
+            }
+        };
+        fetchQuestions();
+    }, [StoreCode]);
 
     const handleResponseChange = (questionId, answer) => {
         setResponses(prevResponses => ({
@@ -26,12 +38,12 @@ const SurveyForm = ({ storeCode }) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            await axios.post('http://localhost:5139/api/surveyresponse', {
-                storeCode,
+            await axios.post(`${baseURL}/surveyresponse`, {
+                StoreCode,
                 responses,
-                userAgent: navigator.userAgent
+                UserAgent: navigator.UserAgent
             });
-            setShowPhoneVerification(true); // Anket gönderildikten sonra telefon doğrulamasını göster
+            setShowPhoneVerification(true);
         } catch (error) {
             console.error("Gönderim hatası:", error);
             alert("Gönderim sırasında bir hata oluştu.");
@@ -42,8 +54,9 @@ const SurveyForm = ({ storeCode }) => {
 
     const handlePhoneVerification = async () => {
         try {
-            await axios.post('http://localhost:5139/api/verifyphone', { phoneNumber });
+            await axios.post(`${baseURL}/surveyresponse/verify`, { PhoneNumber });
             alert("Telefon numaranız doğrulandı!");
+            setShowPhoneVerification(false);
         } catch (error) {
             console.error("Telefon doğrulama hatası:", error);
             alert("Telefon doğrulama sırasında bir hata oluştu.");
@@ -56,7 +69,7 @@ const SurveyForm = ({ storeCode }) => {
                 <label>Telefon Numarası:</label>
                 <input
                     type="tel"
-                    value={phoneNumber}
+                    value={PhoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     required
                 />
@@ -67,10 +80,10 @@ const SurveyForm = ({ storeCode }) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            {questions.map(question => (
+            {questions.map(Question => (
                 <SurveyQuestion
-                    key={question.surveyId}
-                    question={question}
+                    key={Question.SurveyId}
+                    Question={Question}
                     onResponseChange={handleResponseChange}
                 />
             ))}

@@ -3,19 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class Survey
 {
-    [Key] // Primary key olarak belirtin
-    public int SurveyId { get; set; }
+    [Key]
+    public int SurveyId { get; set; } //Anket id'si
     
     [ForeignKey("Store")]
-    public int StoreId { get; set; } // Mağaza kimliği
-    
-    public Store? Store { get; set; } // Nullable yapıldı
+    public int StoreId { get; set; } // Mağaza id'si
+    public Store? Store { get; set; }
 
     [Required(ErrorMessage = "Anket soruları gerekli")]
-    public string Question { get; set; } = string.Empty;
+    public string Question { get; set; } = string.Empty; //sorular
     
     [Required(ErrorMessage = "Anket soru tipi gerekli")]
-    public string QuestionType { get; set; } = string.Empty;
+    public string QuestionType { get; set; } = string.Empty; //soru tipi (radio,text,checkbox)
     
-    public bool IsRequired { get; set; } = false;
+    public bool IsRequired { get; set; } = false; //gereklilik
 }
