@@ -40,26 +40,6 @@ namespace EHM_Survey_App.Migrations
                     b.HasKey("StoreId");
 
                     b.ToTable("Stores", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            StoreId = 1,
-                            StoreCode = "STORE123",
-                            StoreName = "Mağaza 1"
-                        },
-                        new
-                        {
-                            StoreId = 2,
-                            StoreCode = "STORE456",
-                            StoreName = "Mağaza 2"
-                        },
-                        new
-                        {
-                            StoreId = 3,
-                            StoreCode = "STORE789",
-                            StoreName = "Mağaza 3"
-                        });
                 });
 
             modelBuilder.Entity("Survey", b =>
@@ -74,6 +54,10 @@ namespace EHM_Survey_App.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QuestionOptions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

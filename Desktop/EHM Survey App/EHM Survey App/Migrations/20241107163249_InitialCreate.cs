@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace EHM_Survey_App.Migrations
 {
     /// <inheritdoc />
@@ -65,6 +63,7 @@ namespace EHM_Survey_App.Migrations
                     StoreId = table.Column<int>(type: "int", nullable: false),
                     Question = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuestionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuestionOptions = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsRequired = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -76,16 +75,6 @@ namespace EHM_Survey_App.Migrations
                         principalTable: "Stores",
                         principalColumn: "StoreId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Stores",
-                columns: new[] { "StoreId", "StoreCode", "StoreName" },
-                values: new object[,]
-                {
-                    { 1, "STORE123", "Mağaza 1" },
-                    { 2, "STORE456", "Mağaza 2" },
-                    { 3, "STORE789", "Mağaza 3" }
                 });
 
             migrationBuilder.CreateIndex(

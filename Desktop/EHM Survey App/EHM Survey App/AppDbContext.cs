@@ -16,12 +16,5 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Survey>().ToTable("Surveys");
         modelBuilder.Entity<SurveyResponse>().ToTable("SurveyResponses");
         modelBuilder.Entity<Store>().ToTable("Stores");
-
-        // Başlangıç verileri eklendi
-        modelBuilder.Entity<Store>().HasData(
-            new Store { StoreId = 1, StoreCode = "STORE123", StoreName = "Mağaza 1" },
-            new Store { StoreId = 2, StoreCode = "STORE456", StoreName = "Mağaza 2" },
-            new Store { StoreId = 3, StoreCode = "STORE789", StoreName = "Mağaza 3" }
-        );
     }
 }
