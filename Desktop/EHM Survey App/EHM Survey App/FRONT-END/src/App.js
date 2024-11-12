@@ -22,8 +22,11 @@ function App() {
                         <Route path="/survey/:StoreCode" element={<SurveyForm />} />
                     </Routes>
                 </main>
-                <footer style={{ textAlign: 'center', padding: '1%', backgroundColor: '#f1f1f1' }}>
-                    <img src="/logo.png" alt="Logo" style={{ width: '30%', height: '30%' }} />
+                <footer style={{ textAlign: 'center', padding: '1%', backgroundColor: 'red' }}>
+                    <img 
+                    src="https://static.ticimax.cloud/61202/Uploads/HeaderTasarim/Header1/147893e0-e307-4754-8cc7-ec3849dac48f.jpg" 
+                    alt="Logo" 
+                    style={{ width: '30%', height: '30%' }} />
                     <p>English Home © 2024</p>
                 </footer>
             </div>

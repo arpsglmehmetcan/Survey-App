@@ -6,7 +6,7 @@ using Twilio.Rest.Verify.V2.Service;
 public class SmsService
 {
     private readonly string _accountSid = "AC0207641989a64e367119ae3b8862ea94";
-    private readonly string _authToken = "[a051594efe1b2cc77d24a6b4e7109c7a]";
+    private readonly string _authToken = "[2eef3229149937819d936e37f834a98e]";
     private readonly string _serviceSid = "VA8f5aad99b864f899aba55ebe582e38df";
 
     public SmsService()
@@ -24,6 +24,12 @@ public class SmsService
     {
         try
         {
+            TwilioClient.Init(_accountSid, _authToken);
+            var messageOptions = new CreateMessageOptions(
+            new PhoneNumber("+905079710798"));
+            messageOptions.Body = "doğrulama kodunuz: 1453";
+            var message = MessageResource.Create(messageOptions);
+
             var verification = await VerificationResource.CreateAsync(
                 to: PhoneNumber,
                 channel: "sms",
@@ -33,7 +39,7 @@ public class SmsService
             Console.WriteLine($"Verification SID: {verification.Sid}");
             return new SmsResult
             {
-                IsSuccessful = verification.Status == "pending",
+                IsSuccessful = verification.Status == "beklemede",
                 ErrorMessage = null
             };
         }
@@ -60,7 +66,7 @@ public class SmsService
 
             return new SmsResult
             {
-                IsSuccessful = verificationCheck.Status == "approved",
+                IsSuccessful = verificationCheck.Status == "onaylandı",
                 ErrorMessage = null
             };
         }
