@@ -1,12 +1,13 @@
-using System;
-using System.Threading.Tasks;
 using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 using Twilio.Rest.Verify.V2.Service;
+
 
 public class SmsService
 {
     private readonly string _accountSid = "AC0207641989a64e367119ae3b8862ea94";
-    private readonly string _authToken = "[2eef3229149937819d936e37f834a98e]";
+    private readonly string _authToken = "[4f34ae76dacd1d9193c9a1f8cbb1f0d7]";
     private readonly string _serviceSid = "VA8f5aad99b864f899aba55ebe582e38df";
 
     public SmsService()
