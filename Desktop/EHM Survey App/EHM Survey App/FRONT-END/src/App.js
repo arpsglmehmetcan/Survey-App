@@ -7,7 +7,7 @@ function App() {
         <Router>
             <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <header style={{ textAlign: 'center', padding: '1%' }}>
-                    <h1 style={{ color: '#04385c', fontSize: '3rem' }}>Müşteri Memnuniyeti Anketi</h1>
+                    <h1 style={{ color: '#1c45b0', fontSize: '3rem' }}>Müşteri Memnuniyeti Anketi</h1>
                 </header>
                 <main style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Routes>

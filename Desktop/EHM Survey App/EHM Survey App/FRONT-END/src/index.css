@@ -1,37 +1,59 @@
-body {
-  font-family: Arial, sans-serif;
-}
-
-h1 {
-  text-align: center;
-}
-
 form {
   max-width: 500px;
   margin: 0 auto;
+  background-color: #f1f1f1;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+fieldset {
+  border: none;
+  margin-bottom: 30px;
 }
 
 label {
   font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-input[type="text"], input[type="tel"] {
+.radio-group, .checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+input[type="text"], textarea {
   width: 100%;
-  padding: 8px;
-  margin: 8px 0;
-  box-sizing: border-box;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 20px; 
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 button {
-  padding: 10px;
-  width: 100%;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #28a745;
+  color: #fff;
+  padding: 12px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
 }
 
-button:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
+button:hover {
+  background-color: #218838;
+}
+
+.heading {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
 }
