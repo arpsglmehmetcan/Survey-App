@@ -1,14 +1,14 @@
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
-using Twilio.Rest.Verify.V2.Service;
-
+using System;
+using System.Threading.Tasks;
 
 public class SmsService
 {
     private readonly string _accountSid = "AC0207641989a64e367119ae3b8862ea94";
-    private readonly string _authToken = "[4f34ae76dacd1d9193c9a1f8cbb1f0d7]";
-    private readonly string _serviceSid = "VA8f5aad99b864f899aba55ebe582e38df";
+    private readonly string _authToken = "4f34ae76dacd1d9193c9a1f8cbb1f0d7";
+    private readonly string _serviceSid = "VAadc9a492c8210038c928a1c28362973c";
 
     public SmsService()
     {
@@ -18,30 +18,37 @@ public class SmsService
     public class SmsResult
     {
         public bool IsSuccessful { get; set; }
-        public string? ErrorMessage { get; set; } = string.Empty;
+        public string? ErrorMessage { get; set; }
+        public string? VerificationCode { get; set; }
     }
 
-    public async Task<SmsResult> SendVerificationCode(string PhoneNumber)
+    // 6 haneli rastgele bir doğrulama kodu oluşturur
+    private string GenerateVerificationCode()
+    {
+        Random random = new Random();
+        return random.Next(100000, 999999).ToString();
+    }
+
+    public async Task<SmsResult> SendVerificationCode(string phoneNumber)
     {
         try
         {
-            TwilioClient.Init(_accountSid, _authToken);
-            var messageOptions = new CreateMessageOptions(
-            new PhoneNumber("+905079710798"));
-            messageOptions.Body = "doğrulama kodunuz: 1453";
-            var message = MessageResource.Create(messageOptions);
+            // 6 haneli doğrulama kodu oluştur
+            string verificationCode = GenerateVerificationCode();
 
-            var verification = await VerificationResource.CreateAsync(
-                to: PhoneNumber,
-                channel: "sms",
-                pathServiceSid: _serviceSid
-            );
+            // SMS gönderimi için mesaj ayarları
+            var messageOptions = new CreateMessageOptions(new PhoneNumber(phoneNumber))
+            {
+                Body = $"Doğrulama kodunuz: {verificationCode}"
+            };
 
-            Console.WriteLine($"Verification SID: {verification.Sid}");
+            var message = await MessageResource.CreateAsync(messageOptions);
+            Console.WriteLine($"SMS gönderildi: {message.Sid}");
+
             return new SmsResult
             {
-                IsSuccessful = verification.Status == "beklemede",
-                ErrorMessage = null
+                IsSuccessful = true,
+                VerificationCode = verificationCode
             };
         }
         catch (Exception ex)
@@ -55,30 +62,18 @@ public class SmsService
         }
     }
 
-    public async Task<SmsResult> VerifyCode(string PhoneNumber, string VerificationCode)
+    public Task<SmsResult> VerifyCode(string inputCode, string actualCode)
     {
-        try
+        // Kullanıcının girdiği kod ile gönderilen kodu karşılaştır
+        if (inputCode == actualCode)
         {
-            var verificationCheck = await VerificationCheckResource.CreateAsync(
-                to: PhoneNumber,
-                code: VerificationCode,
-                pathServiceSid: _serviceSid
-            );
+            return Task.FromResult(new SmsResult { IsSuccessful = true });
+        }
 
-            return new SmsResult
-            {
-                IsSuccessful = verificationCheck.Status == "onaylandı",
-                ErrorMessage = null
-            };
-        }
-        catch (Exception ex)
+        return Task.FromResult(new SmsResult
         {
-            Console.WriteLine($"Hata oluştu: {ex.Message}");
-            return new SmsResult
-            {
-                IsSuccessful = false,
-                ErrorMessage = ex.Message
-            };
-        }
+            IsSuccessful = false,
+            ErrorMessage = "Doğrulama kodu hatalı."
+        });
     }
 }

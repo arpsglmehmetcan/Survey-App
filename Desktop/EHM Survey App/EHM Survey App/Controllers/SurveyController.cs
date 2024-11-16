@@ -17,13 +17,13 @@ public class SurveyController : ControllerBase
         _qrCodeGeneratorService = qrCodeGeneratorService;
     }
 
-    [HttpGet("get-surveys/{StoreCode}")]
+    [HttpGet("get-survey/{StoreCode}")]
     public async Task<ActionResult<IEnumerable<Survey>>> GetSurveyByStore(string StoreCode)
     {
         var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreCode == StoreCode);
         if (store == null)
         {
-            return NotFound("Bu mağaza koduna sahip mağaza bulunamadı.");
+            return NotFound(new { message = "Bu mağaza koduna sahip mağaza bulunamadı." });
         }
 
         var surveys = await _context.Surveys
@@ -32,13 +32,13 @@ public class SurveyController : ControllerBase
 
         if (surveys == null || !surveys.Any())
         {
-            return NotFound("Bu mağaza için anket sorusu bulunamadı.");
+            return NotFound(new { message = "Bu mağaza için anket sorusu bulunamadı." });
         }
 
         return Ok(surveys);
     }
 
-    [HttpPost("submit-Response")]
+    [HttpPost("submit-response")]
     public async Task<ActionResult<SurveyResponse>> SubmitSurveyResponse(SurveyResponse Response)
     {
         if (!ModelState.IsValid)

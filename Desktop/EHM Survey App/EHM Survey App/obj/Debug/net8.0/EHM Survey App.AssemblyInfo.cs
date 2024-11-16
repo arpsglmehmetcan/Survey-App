@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EHM Survey App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b2fe6117007fe11b07ab237c2142f3f52b0184c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d62b08c154c6647845ac692c01289481e7d00e2")]
 [assembly: System.Reflection.AssemblyProductAttribute("EHM Survey App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EHM Survey App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

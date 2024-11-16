@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj": {}
+    "C:\\Users\\mehme\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj": {
+    "C:\\Users\\mehme\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
+        "projectUniqueName": "C:\\Users\\mehme\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
         "projectName": "EHM Survey App",
-        "projectPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
+        "projectPath": "C:\\Users\\mehme\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
         "packagesPath": "C:\\Users\\mehme\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
+        "outputPath": "C:\\Users\\mehme\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mehme\\AppData\\Roaming\\NuGet\\NuGet.Config",

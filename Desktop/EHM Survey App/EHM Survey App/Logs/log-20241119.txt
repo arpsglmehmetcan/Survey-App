@@ -1,0 +1,14 @@
+[21:17:24 WRN] Failed to determine the https port for redirect.
+[21:34:14 WRN] Failed to determine the https port for redirect.
+[22:11:25 WRN] Failed to determine the https port for redirect.
+[22:12:19 WRN] Failed to determine the https port for redirect.
+[22:13:07 WRN] Failed to determine the https port for redirect.
+[22:13:44 WRN] Failed to determine the https port for redirect.
+[22:14:10 WRN] Failed to determine the https port for redirect.
+[22:15:04 WRN] Failed to determine the https port for redirect.
+[22:16:43 WRN] Failed to determine the https port for redirect.
+[22:17:00 WRN] Failed to determine the https port for redirect.
+[22:17:40 WRN] Failed to determine the https port for redirect.
+[22:18:02 WRN] Failed to determine the https port for redirect.
+[22:19:11 WRN] Failed to determine the https port for redirect.
+[22:21:20 WRN] Failed to determine the https port for redirect.

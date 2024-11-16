@@ -5801,9 +5801,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
-      "projectName": "EHM Survey App",
-      "projectPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
+      "projectUniqueName": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
+      "projectName": "EHM_Survey_App",
+      "projectPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
       "packagesPath": "C:\\Users\\mehme\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
       "projectStyle": "PackageReference",

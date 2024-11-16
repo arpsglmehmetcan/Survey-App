@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ogex+4guG0w=",
+  "dgSpecHash": "/JIr9LdgO7E=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM Survey App.csproj",
+  "projectFilePath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mehme\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\mehme\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

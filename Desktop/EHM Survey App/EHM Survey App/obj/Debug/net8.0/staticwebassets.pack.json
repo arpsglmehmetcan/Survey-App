@@ -1,8 +1,8 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\EHM Survey App.bundle.scp.css",
-      "PackagePath": "staticwebassets\\EHM Survey App.bundle.scp.css"
+      "Id": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\EHM_Survey_App.bundle.scp.css",
+      "PackagePath": "staticwebassets\\EHM_Survey_App.bundle.scp.css"
     },
     {
       "Id": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\wwwroot\\css\\site.css",
@@ -257,20 +257,20 @@
       "PackagePath": "staticwebassets\\qrcodes\\STORE789_qrcode.png"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EHM Survey App.Microsoft.AspNetCore.StaticWebAssets.props",
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EHM_Survey_App.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.EHM Survey App.props",
-      "PackagePath": "build\\EHM Survey App.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.EHM_Survey_App.props",
+      "PackagePath": "build\\EHM_Survey_App.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.EHM Survey App.props",
-      "PackagePath": "buildMultiTargeting\\EHM Survey App.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.EHM_Survey_App.props",
+      "PackagePath": "buildMultiTargeting\\EHM_Survey_App.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.EHM Survey App.props",
-      "PackagePath": "buildTransitive\\EHM Survey App.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.EHM_Survey_App.props",
+      "PackagePath": "buildTransitive\\EHM_Survey_App.props"
     }
   ],
   "ElementsToRemove": []

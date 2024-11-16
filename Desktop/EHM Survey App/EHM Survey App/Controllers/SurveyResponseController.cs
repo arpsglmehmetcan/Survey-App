@@ -18,51 +18,48 @@ public class SurveyResponseController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateSurveyResponse([FromBody] SurveyResponse request)
     {
-        // Retrieve StoreId using storeCode
         var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreId == request.StoreId);
         if (store == null)
-        {
             return NotFound("Mağaza bulunamadı.");
-        }
 
-        var Response = new SurveyResponse
-        {
-            PhoneNumber = request.PhoneNumber,
-            StoreId = request.StoreId,  
-            Response = request.Response,
-            UserAgent = request.UserAgent,
-            IsVerified = false
-        };
-
-        _context.SurveyResponses.Add(Response);
-        await _context.SaveChangesAsync();
-
-        var smsResult = await _smsService.SendVerificationCode(Response.PhoneNumber);
-
-        if (smsResult.IsSuccessful)
-        {
-            return Ok(new { message = "Anket yanıtınız alındı ve doğrulama kodunuz gönderildi." });
-        }
-        else
+        var smsResult = await _smsService.SendVerificationCode(request.PhoneNumber);
+        if (!smsResult.IsSuccessful)
         {
             return StatusCode(500, $"Doğrulama kodu gönderilirken bir hata oluştu: {smsResult.ErrorMessage}");
         }
+
+        var response = new SurveyResponse
+        {
+            PhoneNumber = request.PhoneNumber,
+            StoreId = request.StoreId,
+            Response = request.Response,
+            UserAgent = request.UserAgent,
+            VerificationCode = smsResult.VerificationCode ?? string.Empty,
+            IsVerified = false,
+            SubmissonDate = DateTime.UtcNow
+        };
+
+        _context.SurveyResponses.Add(response);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Anket yanıtınız alındı ve doğrulama kodunuz gönderildi." });
     }
 
     [HttpPost("verify")]
     public async Task<IActionResult> VerifySmsCode([FromBody] SurveyResponse request)
     {
-        var Response = await _context.SurveyResponses
+        var response = await _context.SurveyResponses
             .FirstOrDefaultAsync(r => r.PhoneNumber == request.PhoneNumber && !r.IsVerified);
 
-        if (Response == null)
+        if (response == null)
+        {
             return NotFound("Yanıt bulunamadı veya zaten doğrulanmış.");
+        }
 
-        var smsResult = await _smsService.VerifyCode(Response.PhoneNumber, request.VerificationCode);
-
+        var smsResult = await _smsService.VerifyCode(request.VerificationCode, response.VerificationCode);
         if (smsResult.IsSuccessful)
         {
-            Response.IsVerified = true;
+            response.IsVerified = true;
             await _context.SaveChangesAsync();
             return Ok("SMS doğrulandı ve sonuç kaydedildi.");
         }
