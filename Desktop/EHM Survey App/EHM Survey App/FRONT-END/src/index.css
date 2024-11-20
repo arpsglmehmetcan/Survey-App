@@ -19,17 +19,19 @@ label {
   color: #333;
 }
 
-.radio-group, .checkbox-group {
+.radio-group,
+.checkbox-group {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-input[type="text"], textarea {
+input[type='text'],
+textarea {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
 }

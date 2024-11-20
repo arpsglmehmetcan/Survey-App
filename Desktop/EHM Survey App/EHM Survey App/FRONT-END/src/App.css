@@ -21,7 +21,9 @@ label {
   margin-bottom: 10px;
 }
 
-input[type="text"], input[type="tel"], textarea {
+input[type='text'],
+input[type='tel'],
+textarea {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
