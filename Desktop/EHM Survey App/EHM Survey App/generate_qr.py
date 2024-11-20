@@ -5,24 +5,26 @@ import sys
 def generate_qr(store_code):
     # Frontend URL'sini oluşturun
     base_url = "http://192.168.1.33:3000/survey"
-    url = f"{base_url}/{store_code}"
+    url = f"{base_url}/{store_code}"  # QR koduna gömülecek URL
 
     # QR kodunu oluştur
     qr = qrcode.make(url)
 
-    # Kayıt dosya yolunu belirle
-    file_path = os.path.join("wwwroot", "qrcodes", f"{store_code}_qrcode.png")
+    # QR kodun kaydedileceği klasörü ve dosya yolunu ayarla
+    output_directory = os.path.join("wwwroot", "qrcodes")  # 'wwwroot/qrcodes' dizini
+    os.makedirs(output_directory, exist_ok=True)  # Klasör yoksa oluştur
 
-    # Kayıt dizinini oluştur (eğer yoksa)
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    # Dosya adını ve tam yolunu ayarla
+    file_name = f"{store_code}_qrcode.png"  # Örnek: STORE123_qrcode.png
+    file_path = os.path.join(output_directory, file_name)  # Tam dosya yolunu oluştur
 
-    # Dosyayı kaydet
+    # QR kodunu kaydet
     qr.save(file_path)
-    print(f"QR kod '{file_path}' olarak oluşturuldu.")
+    print(f"QR kod '{file_path}' olarak oluşturuldu.")  # Dosya oluşturulduğunu yazdır
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        store_code = sys.argv[1]
+        store_code = sys.argv[1]  # Komut satırından mağaza kodu al
         generate_qr(store_code)
     else:
         print("Lütfen bir mağaza kodu girin.")

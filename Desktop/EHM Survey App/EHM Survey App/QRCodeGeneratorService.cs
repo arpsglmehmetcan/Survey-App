@@ -8,18 +8,15 @@ public class QRCodeGeneratorService
 
     public QRCodeGeneratorService(string baseUrl)
     {
-        _baseUrl = baseUrl; // Bu URL front-end uygulamanızın ana adresi olmalı, örneğin "http://192.168.1.33:3000"
+        _baseUrl = baseUrl; // Bu URL, front-end uygulamanızın ana adresi olmalı, örneğin "http://192.168.1.33:3000"
     }
 
     public void GenerateQRCode(string StoreCode)
     {
-        // Önce tam URL'yi oluşturuyoruz
-        string url = $"{_baseUrl}/survey/{StoreCode}";
-
         // Python betiğini çalıştırma
-        string pythonScript = "generate_qr.py";
-        string pythonPath = @"C:\Users\mehme\AppData\Local\Programs\Python\Python312\python.exe";
-        string arguments = $"{pythonScript} \"{url}\""; // Python betiğine tam URL'yi geçiyoruz
+        string pythonScript = "generate_qr.py"; // Python betiğinin adı
+        string pythonPath = @"C:\Users\mehme\AppData\Local\Programs\Python\Python312\python.exe"; // Python çalıştırıcı yolu
+        string arguments = $"{pythonScript} \"{StoreCode}\""; // Sadece mağaza kodunu gönderiyoruz
 
         ProcessStartInfo start = new ProcessStartInfo
         {
@@ -31,23 +28,30 @@ public class QRCodeGeneratorService
             CreateNoWindow = true
         };
 
-        using (Process process = Process.Start(start) ?? throw new InvalidOperationException("Process başlatılamadı."))
+        try
         {
-            using (StreamReader reader = process.StandardOutput)
+            using (Process process = Process.Start(start) ?? throw new InvalidOperationException("Python işlemi başlatılamadı."))
             {
-                string result = reader.ReadToEnd();
-                Console.WriteLine(result);
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string result = reader.ReadToEnd(); // Python betiğinin standart çıktısını okuma
+                    Console.WriteLine(result); // Terminale yazdır
+                }
+
+                string errors = process.StandardError.ReadToEnd(); // Python betiğinin hata çıktısını okuma
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    Console.WriteLine("Hata: " + errors);
+                }
             }
 
-            string errors = process.StandardError.ReadToEnd();
-            if (!string.IsNullOrEmpty(errors))
-            {
-                Console.WriteLine("Hata: " + errors);
-            }
+            // QR kodunun kaydedileceği dosya yolunu oluştur
+            string filePath = Path.Combine("wwwroot", "qrcodes", $"{StoreCode}_qrcode.png");
+            Console.WriteLine($"QR kod başarıyla oluşturuldu ve şu dizine kaydedildi: {filePath}");
         }
-
-        // QR kodunu kaydetmek için dosya yolu oluşturma
-        string filePath = Path.Combine("wwwroot", "qrcodes", $"{StoreCode}_qrcode.png");
-        Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException("Directory adı alınamadı."));
+        catch (Exception ex)
+        {
+            Console.WriteLine($"QR kod oluşturma sırasında hata: {ex.Message}");
+        }
     }
 }
