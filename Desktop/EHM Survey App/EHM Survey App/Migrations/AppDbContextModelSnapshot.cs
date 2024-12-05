@@ -117,7 +117,7 @@ namespace EHM_Survey_App.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isAbandoned")
+                    b.Property<bool>("Abandoned")
                         .HasColumnType("bit");
 
                     b.HasKey("ResponseId");

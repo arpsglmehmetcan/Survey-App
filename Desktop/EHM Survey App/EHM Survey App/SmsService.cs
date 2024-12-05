@@ -8,7 +8,7 @@ public class SmsService
 {
     private readonly string _accountSid = "AC0207641989a64e367119ae3b8862ea94";
     private readonly string _authToken = "4f34ae76dacd1d9193c9a1f8cbb1f0d7";
-    private readonly string _serviceSid = "VAadc9a492c8210038c928a1c28362973c";
+    //private readonly string _serviceSid = "VAadc9a492c8210038c928a1c28362973c";
 
     public SmsService()
     {

@@ -3,9 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Linq;
-using Serilog;
+using System.IO; // Log dosyaları için gerekli
+using static LogCleaner; // Log temizleme işlemi için
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add custom services
 builder.Services.AddScoped<SmsService>();
 builder.Services.AddScoped<QRCodeGeneratorService>(provider => 
-    new QRCodeGeneratorService("http://192.168.1.33:5139/api/survey"));
+    new QRCodeGeneratorService("http://localhost:5139/api/survey"));
 
 // Configure CORS to allow all origins, methods, and headers
 builder.Services.AddCors(options =>
@@ -38,6 +40,9 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+// Log temizleme işlevini çağırma
+LogCleaner.CleanUpOldLogs("Logs", 3);
 
 var app = builder.Build();
 

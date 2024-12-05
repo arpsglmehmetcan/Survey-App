@@ -1,59 +1,60 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj": {}
+    "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj": {
+    "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
+        "projectUniqueName": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
         "projectName": "EHM_Survey_App",
-        "projectPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
+        "projectPath": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
         "packagesPath": "C:\\Users\\mehme\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mehme\\Documents\\GitHub\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
+        "outputPath": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mehme\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\mehme\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
-        "originalTargetFrameworks": ["net8.0"],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net9.0": {
+            "targetAlias": "net9.0",
             "projectReferences": {}
           }
         },
         "warningProperties": {
-          "warnAsError": ["NU1605"]
+          "warnAsError": [
+            "NU1605"
+          ]
         },
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
-        }
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.10, )"
+              "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.10, )"
+              "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.10, )"
+              "version": "[9.0.0, )"
             },
             "QRCoder": {
               "target": "Package",
@@ -61,15 +62,15 @@
             },
             "Serilog": {
               "target": "Package",
-              "version": "[4.1.0, )"
+              "version": "[4.2.0-dev-02330, )"
             },
             "Serilog.AspNetCore": {
               "target": "Package",
-              "version": "[8.0.3, )"
+              "version": "[9.0.0-dev-02301, )"
             },
             "Serilog.Settings.Configuration": {
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[9.0.0-dev-02304, )"
             },
             "Serilog.Sinks.Console": {
               "target": "Package",
@@ -81,11 +82,11 @@
             },
             "System.Drawing.Common": {
               "target": "Package",
-              "version": "[8.0.10, )"
+              "version": "[9.0.0, )"
             },
             "Twilio": {
               "target": "Package",
-              "version": "[7.6.0, )"
+              "version": "[7.7.0, )"
             }
           },
           "imports": [
@@ -107,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

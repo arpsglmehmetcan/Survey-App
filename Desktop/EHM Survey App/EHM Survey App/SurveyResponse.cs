@@ -6,7 +6,7 @@ public class SurveyResponse
 {
     [Key]
     public int ResponseId { get; set; }
-    
+
     [ForeignKey("Survey")]
     public int SurveyId { get; set; }
 
@@ -20,14 +20,14 @@ public class SurveyResponse
     [Required(ErrorMessage = "Telefon numarası girilmesi gerekiyor")]
     [Phone(ErrorMessage = "Geçersiz telefon numarası")]
     public string PhoneNumber { get; set; } = string.Empty;
-    
+
     public bool IsVerified { get; set; } = false;
 
     public string VerificationCode { get; set; } = string.Empty;
-    
+
     public DateTime SubmissonDate { get; set; } = DateTime.UtcNow;
 
-    public bool isAbandoned { get; set; } = false;
+    public bool Abandoned { get; set; } = false;
 
     public int NpsScore { get; set; } = 0;
 

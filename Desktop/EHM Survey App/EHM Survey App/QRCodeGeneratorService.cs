@@ -8,15 +8,15 @@ public class QRCodeGeneratorService
 
     public QRCodeGeneratorService(string baseUrl)
     {
-        _baseUrl = baseUrl; // Bu URL, front-end uygulamanızın ana adresi olmalı, örneğin "http://192.168.1.33:3000"
+        _baseUrl = baseUrl; // Bu URL, front-end uygulamanızın ana adresi olmalı, örneğin "http://192.168.1.5:3000"
     }
 
     public void GenerateQRCode(string StoreCode)
     {
         // Python betiğini çalıştırma
         string pythonScript = "generate_qr.py"; // Python betiğinin adı
-        string pythonPath = @"C:\Users\mehme\AppData\Local\Programs\Python\Python312\python.exe"; // Python çalıştırıcı yolu
-        string arguments = $"{pythonScript} \"{StoreCode}\""; // Sadece mağaza kodunu gönderiyoruz
+        string pythonPath = @"C:\Users\mehme\AppData\Local\Microsoft\WindowsApps\python.exe"; // Python çalıştırıcı yolu
+        string arguments = $"\"{pythonScript}\" \"{StoreCode}\""; // Sadece mağaza kodunu gönderiyoruz
 
         ProcessStartInfo start = new ProcessStartInfo
         {

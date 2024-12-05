@@ -15,7 +15,7 @@ const SurveyForm = () => {
   const [storeError, setStoreError] = useState('');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const baseURL = 'http://192.168.1.33:5139/api';
+  const baseURL = 'http://localhost:5139/api';
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -135,6 +135,13 @@ const SurveyForm = () => {
       border: '1px solid #ddd',
       borderRadius: '5px',
     },
+    input2: {
+      width: '20%',
+      padding: '12px',
+      marginBottom: '15px',
+      border: '1px solid #ddd',
+      borderRadius: '5px',
+    },
     phoneInput: {
       width: windowWidth > 768 ? '120px' : '100%',
       padding: '12px',
@@ -183,52 +190,60 @@ const SurveyForm = () => {
             <Form style={responsiveStyles.surveyForm}>
               <h2 style={responsiveStyles.h2}>Anket Soruları</h2>
               {questions.map((question) => (
-                <fieldset key={question.surveyId}>
-                  <label style={responsiveStyles.label}>
-                    {question.question}
-                  </label>
-                  {question.questionType === 'radio' &&
-                    question.questionOptions &&
-                    JSON.parse(question.questionOptions).map(
-                      (option, index) => (
-                        <div key={index}>
-                          <label>
-                            <Field
-                              type="radio"
-                              name={String(question.surveyId)}
-                              value={option}
-                            />
-                            {option}
-                          </label>
-                        </div>
-                      )
-                    )}
-                  {question.questionType === 'text' && (
-                    <Field
-                      type="text"
-                      name={String(question.surveyId)}
-                      placeholder="Cevabınızı yazın..."
-                      style={responsiveStyles.input}
-                    />
-                  )}
-                  {question.questionType === 'checkbox' &&
-                    question.questionOptions &&
-                    JSON.parse(question.questionOptions).map(
-                      (option, index) => (
-                        <div key={index}>
-                          <label>
-                            <Field
-                              type="checkbox"
-                              name={`${question.surveyId}`}
-                              value={option}
-                            />
-                            {option}
-                          </label>
-                        </div>
-                      )
-                    )}
-                </fieldset>
-              ))}
+    <fieldset key={question.surveyId}>
+        <label style={responsiveStyles.label}>
+            {question.question}
+        </label>
+        {question.questionType === 'radio' &&
+            question.questionOptions &&
+            JSON.parse(question.questionOptions).map((option, index) => (
+                <div key={index}>
+                    <label>
+                        <Field
+                            type="radio"
+                            name={String(question.surveyId)}
+                            value={option}
+                        />
+                        {option}
+                    </label>
+                </div>
+            ))}
+
+        {question.questionType === 'text' && (
+            <Field
+                type="text"
+                name={String(question.surveyId)}
+                placeholder="Cevabınızı yazın..."
+                style={responsiveStyles.input}
+            />
+        )}
+
+        {question.questionType === 'checkbox' &&
+            question.questionOptions &&
+            JSON.parse(question.questionOptions).map((option, index) => (
+                <div key={index}>
+                    <label>
+                        <Field
+                            type="checkbox"
+                            name={`${question.surveyId}`}
+                            value={option}
+                        />
+                        {option}
+                    </label>
+                </div>
+            ))}
+
+        {question.questionType === 'rating' && question.questionOptions && (
+            <Field
+                type="number"
+                name={String(question.surveyId)}
+                min={JSON.parse(question.questionOptions).min}
+                max={JSON.parse(question.questionOptions).max}
+                style={responsiveStyles.input2}
+            />
+        )}
+    </fieldset>
+))}
 
               <div>
                 <h3>Telefon Numaranızı Giriniz</h3>

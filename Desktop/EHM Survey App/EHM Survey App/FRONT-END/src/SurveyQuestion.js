@@ -52,7 +52,12 @@ const SurveyQuestion = ({ Question, onResponseChange }) => {
         </div>
       )}
       {Question.QuestionType === 'rating' && (
-        <input type="number" min="1" max="10" onChange={handleChange} />
+        <input 
+        type="number" 
+        min={JSON.parse(Question.QuestionOptions).min}
+        max={JSON.parse(Question.QuestionOptions).max} 
+        onChange={handleChange} 
+        />
       )}
       {Question.QuestionType === 'text' && (
         <input type="text" onChange={handleChange} />

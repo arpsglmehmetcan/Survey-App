@@ -70,7 +70,7 @@ function App() {
             margin: '0',
             bottom: '0',
             width: '100%',
-            position: 'fixed',
+            //position: 'fixed',
             backgroundColor: '#f1f1f1',
             pointerEvents: 'none',
             userSelect: 'none',

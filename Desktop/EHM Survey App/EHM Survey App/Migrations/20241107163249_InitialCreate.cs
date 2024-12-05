@@ -38,7 +38,7 @@ namespace EHM_Survey_App.Migrations
                     IsVerified = table.Column<bool>(type: "bit", nullable: false),
                     VerificationCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubmissonDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    isAbandoned = table.Column<bool>(type: "bit", nullable: false),
+                    Abandoned = table.Column<bool>(type: "bit", nullable: false),
                     NpsScore = table.Column<int>(type: "int", nullable: false),
                     UserAgent = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompletionTime = table.Column<float>(type: "real", nullable: false)
