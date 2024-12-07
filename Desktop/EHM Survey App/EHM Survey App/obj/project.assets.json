@@ -6475,11 +6475,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
+      "projectUniqueName": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
       "projectName": "EHM_Survey_App",
-      "projectPath": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
+      "projectPath": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\EHM_Survey_App.csproj",
       "packagesPath": "C:\\Users\\mehme\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Desktop\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
+      "outputPath": "C:\\Users\\mehme\\OneDrive\\Masaüstü\\Survey-App\\Desktop\\EHM Survey App\\EHM Survey App\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mehme\\AppData\\Roaming\\NuGet\\NuGet.Config"
