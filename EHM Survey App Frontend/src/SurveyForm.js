@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
-import InputMask from 'react-input-mask';
+import { Formik, Form, Field} from 'formik';
 
 const SurveyForm = () => {
   const { StoreCode } = useParams();
   const [questions, setQuestions] = useState([]);
-  const [phoneNumber, setPhoneNumber] = useState('+90 ');
+  const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -54,23 +53,25 @@ const SurveyForm = () => {
     return initialValues;
   };
 
-  const handlePhoneChange = (e) => {
-    let value = e.target.value;
-    if (!value.startsWith('+90 ')) {
-      value = '+90 ';
-    }
-    setPhoneNumber(value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handleSendCode = async (values) => {
-    if (phoneNumber.replace(/\D/g, '').length !== 12) {
-      showError('Lütfen geçerli bir telefon numarası giriniz.');
+    console.log({
+      Email: email,
+      StoreCode,
+      Responses: values,
+  });
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      showError('Lütfen geçerli bir e-posta adresi giriniz.');
       return;
     }
 
     try {
       const response = await axios.post(`${baseURL}/surveyresponse`, {
-        PhoneNumber: phoneNumber,
+        Email: email,
         StoreCode,
         Responses: values,
       });
@@ -86,10 +87,10 @@ const SurveyForm = () => {
   const handleVerifyCode = async () => {
     try {
       const response = await axios.post(`${baseURL}/surveyresponse/verify`, {
-        PhoneNumber: phoneNumber,
+        Email: email,
         VerificationCode: verificationCode,
       });
-      if (response.data === 'SMS doğrulandı ve sonuç kaydedildi.') {
+      if (response.data === 'Email doğrulandı ve sonuç kaydedildi.') {
         setIsVerified(true);
         alert('Doğrulama başarılı! Cevaplarınız kaydedildi.');
       } else {
@@ -130,20 +131,6 @@ const SurveyForm = () => {
     },
     input: {
       width: '100%',
-      padding: '12px',
-      marginBottom: '15px',
-      border: '1px solid #ddd',
-      borderRadius: '5px',
-    },
-    input2: {
-      width: '20%',
-      padding: '12px',
-      marginBottom: '15px',
-      border: '1px solid #ddd',
-      borderRadius: '5px',
-    },
-    phoneInput: {
-      width: windowWidth > 768 ? '120px' : '100%',
       padding: '12px',
       marginBottom: '15px',
       border: '1px solid #ddd',
@@ -190,11 +177,11 @@ const SurveyForm = () => {
             <Form style={responsiveStyles.surveyForm}>
               <h2 style={responsiveStyles.h2}>Anket Soruları</h2>
               {questions.map((question) => (
-    <fieldset key={question.surveyId}>
-        <label style={responsiveStyles.label}>
-            {question.question}
-        </label>
-        {question.questionType === 'radio' &&
+                <fieldset key={question.surveyId}>
+                  <label style={responsiveStyles.label}>
+                    {question.question}
+                  </label>
+                  {question.questionType === 'radio' &&
             question.questionOptions &&
             JSON.parse(question.questionOptions).map((option, index) => (
                 <div key={index}>
@@ -242,25 +229,24 @@ const SurveyForm = () => {
                 style={responsiveStyles.input2}
             />
         )}
-    </fieldset>
-))}
+                </fieldset>
+              ))}
 
               <div>
-                <h3>Telefon Numaranızı Giriniz</h3>
-                <InputMask
-                  mask="+90 999 999 99 99"
-                  value={phoneNumber}
-                  onChange={handlePhoneChange}
-                  placeholder="+90 501 234 56 78"
+                <h3>E-posta Adresinizi Giriniz</h3>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  placeholder="E-posta adresiniz"
                   required
-                  maskChar={null}
-                  style={responsiveStyles.phoneInput}
+                  style={responsiveStyles.input}
                 />
                 {error && (
                   <div style={responsiveStyles.errorMessage}>{error}</div>
                 )}
                 <button type="submit" style={responsiveStyles.button}>
-                  SMS Kodu Gönder
+                  Doğrulama Kodu Gönder
                 </button>
               </div>
 

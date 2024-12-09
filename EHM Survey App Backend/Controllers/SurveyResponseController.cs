@@ -1,40 +1,50 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc; // ControllerBase, IActionResult, HttpPost vb. için
+using Microsoft.EntityFrameworkCore; // Entity Framework Core uzantı metodları için
 
 [ApiController]
 [Route("api/[controller]")]
 public class SurveyResponseController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly SmsService _smsService;
+    private readonly MailService _mailService;
 
-    public SurveyResponseController(AppDbContext context, SmsService smsService)
+    public SurveyResponseController(AppDbContext context, MailService mailService)
     {
         _context = context;
-        _smsService = smsService;
+        _mailService = mailService;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateSurveyResponse([FromBody] SurveyResponse request)
     {
-        var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreId == request.StoreId);
-        if (store == null)
-            return NotFound("Mağaza bulunamadı.");
-
-        var smsResult = await _smsService.SendVerificationCode(request.PhoneNumber);
-        if (!smsResult.IsSuccessful)
+        // Soruların cevaplarının kontrolü
+        if (request.Responses == null || !request.Responses.Any())
         {
-            return StatusCode(500, $"Doğrulama kodu gönderilirken bir hata oluştu: {smsResult.ErrorMessage}");
+            return BadRequest(new { error = "Soruların cevaplanması gerekiyor." });
         }
 
+        // Mağaza kontrolü
+        var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreId == request.StoreId);
+        if (store == null)
+        {
+            return NotFound("Mağaza bulunamadı.");
+        }
+
+        // Email alanını kullanarak doğrulama kodu gönderimi
+        var mailResult = await _mailService.SendVerificationCode(request.Email);
+        if (!mailResult.IsSuccessful)
+        {
+            return StatusCode(500, $"Doğrulama kodu gönderilirken bir hata oluştu: {mailResult.ErrorMessage}");
+        }
+
+        // Yeni SurveyResponse oluşturma
         var response = new SurveyResponse
         {
-            PhoneNumber = request.PhoneNumber,
+            Email = request.Email,
             StoreId = request.StoreId,
-            Response = request.Response,
+            Responses = request.Responses,
             UserAgent = request.UserAgent,
-            VerificationCode = smsResult.VerificationCode ?? string.Empty,
+            VerificationCode = mailResult.VerificationCode ?? string.Empty,
             IsVerified = false,
             SubmissonDate = DateTime.UtcNow
         };
@@ -46,24 +56,26 @@ public class SurveyResponseController : ControllerBase
     }
 
     [HttpPost("verify")]
-    public async Task<IActionResult> VerifySmsCode([FromBody] SurveyResponse request)
+    public async Task<IActionResult> VerifyEmailCode([FromBody] SurveyResponse request)
     {
+        // Email alanını kullanarak yanıtı bul
         var response = await _context.SurveyResponses
-            .FirstOrDefaultAsync(r => r.PhoneNumber == request.PhoneNumber && !r.IsVerified);
+            .FirstOrDefaultAsync(r => r.Email == request.Email && !r.IsVerified);
 
         if (response == null)
         {
             return NotFound("Yanıt bulunamadı veya zaten doğrulanmış.");
         }
 
-        var smsResult = await _smsService.VerifyCode(request.VerificationCode, response.VerificationCode);
-        if (smsResult.IsSuccessful)
+        // Doğrulama kodlarını karşılaştır
+        var mailResult = await _mailService.VerifyCode(request.VerificationCode, response.VerificationCode);
+        if (mailResult.IsSuccessful)
         {
             response.IsVerified = true;
             await _context.SaveChangesAsync();
-            return Ok("SMS doğrulandı ve sonuç kaydedildi.");
+            return Ok("Mail doğrulandı ve sonuç kaydedildi.");
         }
 
-        return BadRequest($"Geçersiz doğrulama kodu: {smsResult.ErrorMessage}");
+        return BadRequest($"Geçersiz doğrulama kodu: {mailResult.ErrorMessage}");
     }
 }

@@ -16,7 +16,7 @@ namespace EHM_Survey_App.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -83,18 +83,21 @@ namespace EHM_Survey_App.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResponseId"));
 
+                    b.Property<bool>("Abandoned")
+                        .HasColumnType("bit");
+
                     b.Property<float>("CompletionTime")
                         .HasColumnType("real");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
                     b.Property<int>("NpsScore")
                         .HasColumnType("int");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Response")
                         .IsRequired()
@@ -110,15 +113,11 @@ namespace EHM_Survey_App.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserAgent")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VerificationCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Abandoned")
-                        .HasColumnType("bit");
 
                     b.HasKey("ResponseId");
 

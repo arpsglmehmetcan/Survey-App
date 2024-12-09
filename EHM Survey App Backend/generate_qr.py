@@ -4,7 +4,7 @@ import sys
 
 def generate_qr(store_code):
     # Frontend URL'sini oluşturun
-    base_url = "http://localhost:3000/survey"
+    base_url = "http://192.168.1.33:3000/survey"
     url = f"{base_url}/{store_code}"  # QR koduna gömülecek URL
 
     # QR kodunu oluştur

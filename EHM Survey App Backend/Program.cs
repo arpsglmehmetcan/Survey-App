@@ -25,9 +25,20 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Mail servisi yapılandırması
+var mailtrapToken = builder.Configuration["Mailtrap:Token"];
+var fromEmail = builder.Configuration["Mailtrap:FromEmail"];
+var fromName = builder.Configuration["Mailtrap:FromName"];
+
+if (string.IsNullOrEmpty(mailtrapToken) || string.IsNullOrEmpty(fromEmail) || string.IsNullOrEmpty(fromName))
+{
+    throw new InvalidOperationException("Mailtrap yapılandırması eksik.");
+}
+
+builder.Services.AddSingleton(new MailService(mailtrapToken, fromEmail, fromName));
+
 // Add custom services
-builder.Services.AddScoped<SmsService>();
-builder.Services.AddScoped<QRCodeGeneratorService>(provider => 
+builder.Services.AddScoped<QRCodeGeneratorService>(provider =>
     new QRCodeGeneratorService("http://localhost:5139/api/survey"));
 
 // Configure CORS to allow all origins, methods, and headers
@@ -46,7 +57,7 @@ LogCleaner.CleanUpOldLogs("Logs", 3);
 
 var app = builder.Build();
 
-// Generate QR codes for each store on startup
+// QR Kod oluşturma işlemi
 using (var scope = app.Services.CreateScope())
 {
     var qrCodeService = scope.ServiceProvider.GetRequiredService<QRCodeGeneratorService>();
@@ -54,12 +65,12 @@ using (var scope = app.Services.CreateScope())
 
     var storeCodes = dbContext.Stores.Select(s => s.StoreCode).ToList();
 
-    foreach (var StoreCode in storeCodes)
+    foreach (var storeCode in storeCodes)
     {
         try
         {
-            qrCodeService.GenerateQRCode(StoreCode);
-            Console.WriteLine($"{StoreCode} için QR kod başarıyla oluşturuldu.");
+            qrCodeService.GenerateQRCode(storeCode);
+            Console.WriteLine($"{storeCode} için QR kod başarıyla oluşturuldu.");
         }
         catch (Exception ex)
         {
@@ -75,10 +86,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseCors("AllowAllOrigins"); // Apply the CORS policy
+app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 // Allow external access

@@ -60,6 +60,10 @@
               "target": "Package",
               "version": "[1.6.0, )"
             },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[112.1.0, )"
+            },
             "Serilog": {
               "target": "Package",
               "version": "[4.2.0-dev-02330, )"
@@ -83,10 +87,6 @@
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[9.0.0, )"
-            },
-            "Twilio": {
-              "target": "Package",
-              "version": "[7.7.0, )"
             }
           },
           "imports": [

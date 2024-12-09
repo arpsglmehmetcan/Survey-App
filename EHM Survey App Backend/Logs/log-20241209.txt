@@ -1,0 +1,15 @@
+[00:18:57 WRN] Failed to determine the https port for redirect.
+[01:07:56 WRN] Failed to determine the https port for redirect.
+[01:26:33 WRN] Failed to determine the https port for redirect.
+[01:28:22 WRN] Failed to determine the https port for redirect.
+[01:31:05 WRN] Failed to determine the https port for redirect.
+[02:08:01 WRN] Failed to determine the https port for redirect.
+[02:14:20 WRN] Failed to determine the https port for redirect.
+[02:36:28 WRN] Failed to determine the https port for redirect.
+[02:40:19 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4600878480"]}
+[02:40:23 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4600878661"]}
+[02:42:24 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4600881302"]}
+[02:43:04 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4600882246"]}
+[02:44:00 WRN] Failed to determine the https port for redirect.
+[03:42:13 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4600965666"]}
+[04:14:55 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4600990313"]}

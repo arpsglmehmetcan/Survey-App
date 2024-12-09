@@ -503,7 +503,6 @@ C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\n
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Mono.TextTemplating.dll
-C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\QRCoder.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Serilog.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Serilog.AspNetCore.dll
@@ -530,7 +529,6 @@ C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\n
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\System.Security.Permissions.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\System.Windows.Extensions.dll
-C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Twilio.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\es\Microsoft.CodeAnalysis.resources.dll
@@ -694,3 +692,4 @@ C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\n
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\EHM_Survey_App.pdb
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\EHM_Survey_App.genruntimeconfig.cache
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\ref\EHM_Survey_App.dll
+C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\RestSharp.dll

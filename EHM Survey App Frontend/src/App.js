@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 
 function App() {
-  useEffect(() => {
+  /*useEffect(() => {
     const disableRightClick = (e) => e.preventDefault();
     document.addEventListener('contextmenu', disableRightClick);
 
@@ -23,7 +23,7 @@ function App() {
       document.removeEventListener('contextmenu', disableRightClick);
       document.removeEventListener('keydown', disableShortcuts);
     };
-  }, []);
+  }, []);   */
 
   return (
     <Router>

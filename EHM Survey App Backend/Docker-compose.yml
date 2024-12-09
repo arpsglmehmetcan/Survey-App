@@ -15,7 +15,7 @@ services:
       context: ./FRONT-END
       dockerfile: Dockerfile
     ports:
-      - '3000:80'
+      - '5139:80'
     environment:
       - NODE_ENV=production
     depends_on:

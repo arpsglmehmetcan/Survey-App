@@ -8,7 +8,7 @@ public class QRCodeGeneratorService
 
     public QRCodeGeneratorService(string baseUrl)
     {
-        _baseUrl = baseUrl; // Bu URL, front-end uygulamanızın ana adresi olmalı, örneğin "http://192.168.1.5:3000"
+        _baseUrl = baseUrl; // Bu URL, front-end uygulamanızın ana adresi olmalı, örneğin "http://192.168.1.5:5139"
     }
 
     public void GenerateQRCode(string StoreCode)

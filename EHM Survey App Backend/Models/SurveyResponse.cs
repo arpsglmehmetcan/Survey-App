@@ -15,11 +15,11 @@ public class SurveyResponse
     public Store? Store { get; set; }
 
     [Required(ErrorMessage = "Soruların cevaplanması gerekiyor")]
-    public string Response { get; set; } = string.Empty;
+    public string Responses { get; set; } = string.Empty; 
 
-    [Required(ErrorMessage = "Telefon numarası girilmesi gerekiyor")]
-    [Phone(ErrorMessage = "Geçersiz telefon numarası")]
-    public string PhoneNumber { get; set; } = string.Empty;
+    [Required(ErrorMessage = "E-posta adresi girilmesi gerekiyor")]
+    [EmailAddress(ErrorMessage = "Geçersiz e-posta adresi")]
+    public string Email { get; set; } = string.Empty; // SMS doğrulaması yerine Email alanı eklendi
 
     public bool IsVerified { get; set; } = false;
 
@@ -31,8 +31,10 @@ public class SurveyResponse
 
     public int NpsScore { get; set; } = 0;
 
-    [Required(ErrorMessage = "Kullanıcı tarayıcı ve cihaz bilgisi gerekli")]
-    public string UserAgent { get; set; } = string.Empty;
+    /// <summary>
+    /// [Required(ErrorMessage = "Kullanıcı tarayıcı ve cihaz bilgisi gerekli")]
+    /// </summary>
+    public string? UserAgent { get; set; } 
 
     public float CompletionTime { get; set; } = 0;
 }
