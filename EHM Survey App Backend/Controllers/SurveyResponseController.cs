@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc; // ControllerBase, IActionResult, HttpPost vb. için
 using Microsoft.EntityFrameworkCore; // Entity Framework Core uzantı metodları için
+using Newtonsoft.Json; // JSON işlemleri için
 
 [ApiController]
 [Route("api/[controller]")]
@@ -17,27 +18,42 @@ public class SurveyResponseController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateSurveyResponse([FromBody] SurveyResponse request)
     {
-        // Soruların cevaplarının kontrolü
-        if (request.Responses == null || !request.Responses.Any())
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (string.IsNullOrEmpty(request.Responses))
         {
             return BadRequest(new { error = "Soruların cevaplanması gerekiyor." });
         }
 
-        // Mağaza kontrolü
+        Dictionary<string, object> responses;
+        try
+        {
+            responses = JsonConvert.DeserializeObject<Dictionary<string, object>>(request.Responses);
+            if (responses == null || !responses.Any())
+            {
+                return BadRequest(new { error = "Soruların cevaplanması gerekiyor." });
+            }
+        }
+        catch (JsonException ex)
+        {
+            return BadRequest(new { error = $"Soruların formatı hatalı: {ex.Message}" });
+        }
+
         var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreId == request.StoreId);
         if (store == null)
         {
             return NotFound("Mağaza bulunamadı.");
         }
 
-        // Email alanını kullanarak doğrulama kodu gönderimi
         var mailResult = await _mailService.SendVerificationCode(request.Email);
         if (!mailResult.IsSuccessful)
         {
-            return StatusCode(500, $"Doğrulama kodu gönderilirken bir hata oluştu: {mailResult.ErrorMessage}");
+            return StatusCode(500, new { error = $"Doğrulama kodu gönderilirken bir hata oluştu: {mailResult.ErrorMessage}" });
         }
 
-        // Yeni SurveyResponse oluşturma
         var response = new SurveyResponse
         {
             Email = request.Email,
@@ -58,24 +74,22 @@ public class SurveyResponseController : ControllerBase
     [HttpPost("verify")]
     public async Task<IActionResult> VerifyEmailCode([FromBody] SurveyResponse request)
     {
-        // Email alanını kullanarak yanıtı bul
         var response = await _context.SurveyResponses
             .FirstOrDefaultAsync(r => r.Email == request.Email && !r.IsVerified);
 
         if (response == null)
         {
-            return NotFound("Yanıt bulunamadı veya zaten doğrulanmış.");
+            return NotFound(new { error = "Yanıt bulunamadı veya zaten doğrulanmış." });
         }
 
-        // Doğrulama kodlarını karşılaştır
-        var mailResult = await _mailService.VerifyCode(request.VerificationCode, response.VerificationCode);
-        if (mailResult.IsSuccessful)
+        if (response.VerificationCode != request.VerificationCode)
         {
-            response.IsVerified = true;
-            await _context.SaveChangesAsync();
-            return Ok("Mail doğrulandı ve sonuç kaydedildi.");
+            return BadRequest(new { error = "Geçersiz doğrulama kodu." });
         }
 
-        return BadRequest($"Geçersiz doğrulama kodu: {mailResult.ErrorMessage}");
+        response.IsVerified = true;
+        await _context.SaveChangesAsync();
+        return Ok(new { message = "Mail doğrulandı ve sonuç kaydedildi." });
     }
 }
+

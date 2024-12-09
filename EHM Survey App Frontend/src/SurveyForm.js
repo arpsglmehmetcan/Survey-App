@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Formik, Form, Field} from 'formik';
+import { Formik, Form, Field } from 'formik';
 
 const SurveyForm = () => {
-  const { StoreCode } = useParams();
+  const { StoreCode } = useParams(); // URL'den StoreCode'u alıyoruz
+  const [storeId, setStoreId] = useState(null); // StoreId burada saklanacak
   const [questions, setQuestions] = useState([]);
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -19,24 +20,22 @@ const SurveyForm = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get(
-          `${baseURL}/survey/get-survey/${StoreCode}`
-        );
-        setQuestions(response.data);
-      } catch (error) {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          setStoreError(error.response.data.message);
+        // Store bilgilerini ve soruları alıyoruz
+        const response = await axios.get(`${baseURL}/survey/get-survey/${StoreCode}`);
+        if (response.status === 200 && response.data.length > 0) {
+          setStoreId(response.data[0].storeId); // İlk anketin StoreId'sini set ediyoruz
+          setQuestions(response.data); // Soruları set ediyoruz
         } else {
-          setStoreError('Beklenmeyen bir hata oluştu.');
+          setStoreError('Mağaza bulunamadı veya anket sorusu yok.');
         }
+      } catch (error) {
+        setStoreError('Bir hata oluştu. Mağaza bilgisi alınamadı.');
       }
     };
+
     fetchQuestions();
 
+    // Ekran boyut değişikliklerini izlemek için event listener ekleme
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -58,23 +57,24 @@ const SurveyForm = () => {
   };
 
   const handleSendCode = async (values) => {
-    console.log({
-      Email: email,
-      StoreCode,
-      Responses: values,
-  });
-
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       showError('Lütfen geçerli bir e-posta adresi giriniz.');
+      return;
+    }
+
+    if (!storeId) {
+      showError('StoreId alınamadı. Lütfen sayfayı yenileyin.');
       return;
     }
 
     try {
       const response = await axios.post(`${baseURL}/surveyresponse`, {
         Email: email,
-        StoreCode,
-        Responses: values,
+        StoreCode, // URL'den alınan StoreCode
+        StoreId: storeId, // Backend'den alınan StoreId
+        Responses: JSON.stringify(values), // Yanıtlar JSON formatında
       });
+
       if (response.data.message) {
         setIsCodeSent(true);
         alert(response.data.message);
@@ -90,7 +90,8 @@ const SurveyForm = () => {
         Email: email,
         VerificationCode: verificationCode,
       });
-      if (response.data === 'Email doğrulandı ve sonuç kaydedildi.') {
+
+      if (response.data.message) {
         setIsVerified(true);
         alert('Doğrulama başarılı! Cevaplarınız kaydedildi.');
       } else {
@@ -182,53 +183,53 @@ const SurveyForm = () => {
                     {question.question}
                   </label>
                   {question.questionType === 'radio' &&
-            question.questionOptions &&
-            JSON.parse(question.questionOptions).map((option, index) => (
-                <div key={index}>
-                    <label>
-                        <Field
+                    question.questionOptions &&
+                    JSON.parse(question.questionOptions).map((option, index) => (
+                      <div key={index}>
+                        <label>
+                          <Field
                             type="radio"
                             name={String(question.surveyId)}
                             value={option}
-                        />
-                        {option}
-                    </label>
-                </div>
-            ))}
+                          />
+                          {option}
+                        </label>
+                      </div>
+                    ))}
 
-        {question.questionType === 'text' && (
-            <Field
-                type="text"
-                name={String(question.surveyId)}
-                placeholder="Cevabınızı yazın..."
-                style={responsiveStyles.input}
-            />
-        )}
+                  {question.questionType === 'text' && (
+                    <Field
+                      type="text"
+                      name={String(question.surveyId)}
+                      placeholder="Cevabınızı yazın..."
+                      style={responsiveStyles.input}
+                    />
+                  )}
 
-        {question.questionType === 'checkbox' &&
-            question.questionOptions &&
-            JSON.parse(question.questionOptions).map((option, index) => (
-                <div key={index}>
-                    <label>
-                        <Field
+                  {question.questionType === 'checkbox' &&
+                    question.questionOptions &&
+                    JSON.parse(question.questionOptions).map((option, index) => (
+                      <div key={index}>
+                        <label>
+                          <Field
                             type="checkbox"
                             name={`${question.surveyId}`}
                             value={option}
-                        />
-                        {option}
-                    </label>
-                </div>
-            ))}
+                          />
+                          {option}
+                        </label>
+                      </div>
+                    ))}
 
-        {question.questionType === 'rating' && question.questionOptions && (
-            <Field
-                type="number"
-                name={String(question.surveyId)}
-                min={JSON.parse(question.questionOptions).min}
-                max={JSON.parse(question.questionOptions).max}
-                style={responsiveStyles.input2}
-            />
-        )}
+                  {question.questionType === 'rating' && question.questionOptions && (
+                    <Field
+                      type="number"
+                      name={String(question.surveyId)}
+                      min={JSON.parse(question.questionOptions).min}
+                      max={JSON.parse(question.questionOptions).max}
+                      style={responsiveStyles.input2}
+                    />
+                  )}
                 </fieldset>
               ))}
 
