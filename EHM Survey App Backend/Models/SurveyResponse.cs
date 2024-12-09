@@ -18,8 +18,9 @@ public class SurveyResponse
     public string Responses { get; set; } = string.Empty; 
 
     [Required(ErrorMessage = "E-posta adresi girilmesi gerekiyor")]
-    [EmailAddress(ErrorMessage = "Geçersiz e-posta adresi")]
-    public string Email { get; set; } = string.Empty; // SMS doğrulaması yerine Email alanı eklendi
+    [RegularExpression(@"^[a-zA-Z0-9ğüşıöçĞÜŞİÖÇ._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Geçersiz e-posta adresi")]
+    public string Email { get; set; } = string.Empty;
+
 
     public bool IsVerified { get; set; } = false;
 

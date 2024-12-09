@@ -53,11 +53,23 @@ const SurveyForm = () => {
   };
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    const input = e.target.value;
+    setEmail(input);
+    if (!validateEmail(input)) {
+      setError("Geçerli bir e-posta adresi giriniz. Türkçe karakterler destekleniyor.");
+    } else {
+      setError("");
+    }
+  };
+
+  const validateEmail = (email) => {
+    // Türkçe karakterleri destekleyen e-posta regex
+    const emailRegex = /^[a-zA-Z0-9ğüşıöçĞÜŞİÖÇ._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
   };
 
   const handleSendCode = async (values) => {
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    if (!email || !validateEmail(email)) {
       showError('Lütfen geçerli bir e-posta adresi giriniz.');
       return;
     }
@@ -191,6 +203,7 @@ const SurveyForm = () => {
                             type="radio"
                             name={String(question.surveyId)}
                             value={option}
+                            disabled={isCodeSent}
                           />
                           {option}
                         </label>
@@ -203,6 +216,7 @@ const SurveyForm = () => {
                       name={String(question.surveyId)}
                       placeholder="Cevabınızı yazın..."
                       style={responsiveStyles.input}
+                      disabled={isCodeSent}
                     />
                   )}
 
@@ -215,6 +229,7 @@ const SurveyForm = () => {
                             type="checkbox"
                             name={`${question.surveyId}`}
                             value={option}
+                            disabled={isCodeSent}
                           />
                           {option}
                         </label>
@@ -227,7 +242,8 @@ const SurveyForm = () => {
                       name={String(question.surveyId)}
                       min={JSON.parse(question.questionOptions).min}
                       max={JSON.parse(question.questionOptions).max}
-                      style={responsiveStyles.input2}
+                      style={responsiveStyles.input}
+                      disabled={isCodeSent}
                     />
                   )}
                 </fieldset>
@@ -236,17 +252,18 @@ const SurveyForm = () => {
               <div>
                 <h3>E-posta Adresinizi Giriniz</h3>
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={handleEmailChange}
                   placeholder="E-posta adresiniz"
                   required
                   style={responsiveStyles.input}
+                  disabled={isCodeSent}
                 />
                 {error && (
                   <div style={responsiveStyles.errorMessage}>{error}</div>
                 )}
-                <button type="submit" style={responsiveStyles.button}>
+                <button type="submit" style={responsiveStyles.button} disabled={isCodeSent}>
                   Doğrulama Kodu Gönder
                 </button>
               </div>
