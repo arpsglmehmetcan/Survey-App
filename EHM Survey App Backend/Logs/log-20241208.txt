@@ -1,6 +1,0 @@
-[17:39:10 WRN] Failed to determine the https port for redirect.
-[18:12:31 WRN] Failed to determine the https port for redirect.
-[18:41:41 WRN] Failed to determine the https port for redirect.
-[20:46:01 WRN] Failed to determine the https port for redirect.
-[22:24:00 WRN] Failed to determine the https port for redirect.
-[22:51:12 WRN] Failed to determine the https port for redirect.

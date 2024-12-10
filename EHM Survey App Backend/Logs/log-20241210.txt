@@ -278,3 +278,5 @@ Path '', line 1, position 1.
    at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+[23:08:42 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4604345859"]}
+[23:13:36 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4604351918"]}

@@ -15,18 +15,19 @@ public class SurveyResponseController : ControllerBase
         _mailService = mailService;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateSurveyResponse([FromBody] SurveyResponse request)
+    [HttpPost("send-code")]
+    public async Task<IActionResult> SendVerificationCode([FromBody] SurveyResponse request)
     {
+        // Email doğrulama
         if (!Regex.IsMatch(request.Email, @"^[a-zA-Z0-9ğüşıöçĞÜŞİÖÇ._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
         {
-        return BadRequest(new { error = "Geçersiz e-posta adresi." });
+            return BadRequest(new { error = "Geçersiz e-posta adresi." });
         }
 
-        // Soruların cevaplarının kontrolü
-        if (request.Responses == null || !request.Responses.Any())
+        // Soruların kontrolü
+        if (string.IsNullOrWhiteSpace(request.Responses) || !request.Responses.Any())
         {
-            return BadRequest(new { error = "Soruların cevaplanması gerekiyor." });
+            return BadRequest(new { error = "Soruların tamamını cevaplamanız gerekiyor." });
         }
 
         // Mağaza kontrolü
@@ -43,13 +44,11 @@ public class SurveyResponseController : ControllerBase
             return StatusCode(500, $"Doğrulama kodu gönderilirken bir hata oluştu: {mailResult.ErrorMessage}");
         }
 
-        // Yeni SurveyResponse oluşturma
+        // Temp olarak doğrulama kodunu kaydet
         var response = new SurveyResponse
         {
             Email = request.Email,
             StoreId = request.StoreId,
-            Responses = request.Responses,
-            UserAgent = request.UserAgent,
             VerificationCode = mailResult.VerificationCode ?? string.Empty,
             IsVerified = false,
             SubmissonDate = DateTime.UtcNow
@@ -58,54 +57,33 @@ public class SurveyResponseController : ControllerBase
         _context.SurveyResponses.Add(response);
         await _context.SaveChangesAsync();
 
-        return Ok(new { message = "Anket yanıtınız alındı ve doğrulama kodunuz gönderildi." });
-        // Gelen verileri kontrol etmek için log ekleyelim
-        Console.WriteLine($"Gelen Email: {request.Email}");
-        Console.WriteLine($"Gelen VerificationCode: {request.VerificationCode}");
-        Console.WriteLine($"Database'deki VerificationCode: {response.VerificationCode}");
+        return Ok(new { message = "Doğrulama kodu gönderildi." });
     }
+
 
     [HttpPost("verify")]
     public async Task<IActionResult> VerifyEmailCode([FromBody] SurveyResponse request)
     {
-        // Gelen verileri kontrol etmek için log ekleyelim
-        Console.WriteLine($"Gelen Email: {request.Email}");
-        Console.WriteLine($"Gelen VerificationCode: {request.VerificationCode}");
-
-        // Gelen verilerin boş olup olmadığını kontrol et
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.VerificationCode))
         {
-            Console.WriteLine("E-posta veya doğrulama kodu boş.");
             return BadRequest(new { error = "E-posta ve doğrulama kodu gerekli." });
         }
 
-        // Database'den kayıt çek
+        // Database'den doğrulama kodunu kontrol et
         var response = await _context.SurveyResponses
             .FirstOrDefaultAsync(r => r.Email == request.Email && !r.IsVerified);
 
-        if (response == null)
+        if (response == null || response.VerificationCode != request.VerificationCode)
         {
-            Console.WriteLine("Yanıt bulunamadı veya zaten doğrulanmış.");
-            return NotFound(new { error = "Yanıt bulunamadı veya zaten doğrulanmış." });
-        }
-
-        // Doğrulama kodlarını karşılaştır
-        Console.WriteLine($"Database'deki VerificationCode: {response.VerificationCode}");
-
-        if (response.VerificationCode != request.VerificationCode)
-        {
-            Console.WriteLine("Doğrulama kodu uyuşmuyor.");
             return BadRequest(new { error = "Geçersiz doğrulama kodu." });
         }
 
-        // Doğrulama başarılı, yanıtı güncelle
+        // Doğrulama başarılı, yanıtları kaydet
         response.IsVerified = true;
+        response.Responses = request.Responses; // Cevapları ekle
         await _context.SaveChangesAsync();
 
-        Console.WriteLine("Doğrulama başarılı, yanıt güncellendi.");
-        return Ok(new { message = "Mail doğrulandı ve sonuç kaydedildi." });
+        return Ok(new { message = "Doğrulama başarılı! Yanıtlar kaydedildi." });
     }
-
-
-
 }
+

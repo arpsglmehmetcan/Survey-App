@@ -11,8 +11,6 @@ const SurveyForm = () => {
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isWaiting, setIsWaiting] = useState(false);
-  const [timer, setTimer] = useState(120); // 2 dakika
   const [error, setError] = useState("");
   const [storeError, setStoreError] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -44,20 +42,6 @@ const SurveyForm = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [StoreCode]);
 
-  /*
-  useEffect(() => {
-    if (isWaiting && timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    } else if (timer === 0) {
-      setIsWaiting(false);
-      setTimer(120); // Süreyi sıfırla
-    }
-  }, [isWaiting, timer]);
-  */
-
   const generateInitialValues = () => {
     const initialValues = {};
     questions.forEach((q) => {
@@ -76,51 +60,42 @@ const SurveyForm = () => {
       setError("Lütfen geçerli bir e-posta adresi giriniz.");
       return;
     }
-
-    if (!storeId) {
-      setError("StoreId alınamadı. Lütfen sayfayı yenileyin.");
-      return;
-    }
-
-    if (isWaiting) {
-      setError("Lütfen 2 dakika bekleyiniz.");
-      return;
-    }
-
+  
     try {
-      const response = await axios.post(`${baseURL}/surveyresponse`, {
+      const response = await axios.post(`${baseURL}/surveyresponse/send-code`, {
         Email: email,
-        StoreCode,
         StoreId: storeId,
         Responses: JSON.stringify(values),
       });
-
+  
       if (response.data.message) {
         setIsCodeSent(true);
-        setIsWaiting(true);
-        setTimer(120);
         alert(response.data.message);
       }
     } catch (error) {
-      setError("Doğrulama kodu gönderilirken bir hata oluştu.");
+      if (error.response && error.response.data.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("Doğrulama kodu gönderilirken bir hata oluştu.");
+      }
     }
   };
-      
 
-  const handleVerifyCode = async () => {
+  const handleVerifyCode = async (values) => {
     try {
       const response = await axios.post(`${baseURL}/surveyresponse/verify`, {
         Email: email,
         VerificationCode: verificationCode,
+        Responses: JSON.stringify(values),
       });
-
+  
       if (response.data.message) {
         alert("Doğrulama başarılı! Cevaplarınız kaydedildi.");
-        navigate("/thank-you"); // Başarıyla doğrulandıktan sonra yönlendirme
+        navigate("/thank-you");
       }
     } catch (error) {
       if (error.response && error.response.data.error) {
-        setError(error.response.data.error); // Hata mesajını backend'den al
+        setError(error.response.data.error);
       } else {
         setError("Doğrulama sırasında bir hata oluştu.");
       }
@@ -182,7 +157,10 @@ const SurveyForm = () => {
       {storeError ? (
         <div style={responsiveStyles.errorMessage}>{storeError}</div>
       ) : (
-        <Formik initialValues={generateInitialValues()} onSubmit={handleSendCode}>
+        <Formik
+          initialValues={generateInitialValues()}
+          onSubmit={isCodeSent ? handleVerifyCode : handleSendCode}
+        >
           {({ values }) => (
             <Form style={responsiveStyles.surveyForm}>
               <h2 style={responsiveStyles.h2}>Anket Soruları</h2>
@@ -197,7 +175,6 @@ const SurveyForm = () => {
                             type="radio"
                             name={String(question.surveyId)}
                             value={option}
-                            //disabled={isWaiting} // Bekleme süresi varsa form elemanlarını devre dışı bırak
                           />
                           {option}
                         </label>
@@ -208,7 +185,6 @@ const SurveyForm = () => {
                       type="text"
                       name={String(question.surveyId)}
                       style={responsiveStyles.input}
-                      //disabled={isWaiting} // Bekleme süresi varsa form elemanlarını devre dışı bırak
                     />
                   )}
                   {question.questionType === "checkbox" &&
@@ -219,22 +195,20 @@ const SurveyForm = () => {
                             type="checkbox"
                             name={`${question.surveyId}`}
                             value={option}
-                            //disabled={isWaiting} // Bekleme süresi varsa form elemanlarını devre dışı bırak
                           />
                           {option}
                         </label>
                       </div>
                     ))}
-                    {question.questionType === "rating" && (
-                      <Field
-                          type="number"
-                          name={String(question.surveyId)}
-                          min={question.questionOptions ? JSON.parse(question.questionOptions).min : 1}
-                          max={question.questionOptions ? JSON.parse(question.questionOptions).max : 10}
-                          style={responsiveStyles.input}
-                      />
-                    )}
-
+                  {question.questionType === "rating" && (
+                    <Field
+                      type="number"
+                      name={String(question.surveyId)}
+                      min={question.questionOptions ? JSON.parse(question.questionOptions).min : 1}
+                      max={question.questionOptions ? JSON.parse(question.questionOptions).max : 10}
+                      style={responsiveStyles.input}
+                    />
+                  )}
                 </fieldset>
               ))}
               <div>
@@ -244,15 +218,13 @@ const SurveyForm = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   style={responsiveStyles.input}
-                  //disabled={isWaiting}
                 />
-                {isWaiting && <p>{`Kod gönderildi. Lütfen ${timer} saniye bekleyiniz.`}</p>}
-                <button type="submit" style={responsiveStyles.button} /*disabled={isWaiting}*/>
-                  Doğrulama Kodu Gönder
+                <button type="submit" style={responsiveStyles.button}>
+                  {isCodeSent ? "Doğrula ve Gönder" : "Doğrulama Kodu Gönder"}
                 </button>
               </div>
               {isCodeSent && (
-                <>
+                <div>
                   <h3>Doğrulama Kodunu Giriniz</h3>
                   <input
                     type="text"
@@ -260,10 +232,7 @@ const SurveyForm = () => {
                     onChange={(e) => setVerificationCode(e.target.value)}
                     style={responsiveStyles.input}
                   />
-                  <button onClick={handleVerifyCode} style={responsiveStyles.button}>
-                    Doğrula ve Gönder
-                  </button>
-                </>
+                </div>
               )}
             </Form>
           )}
