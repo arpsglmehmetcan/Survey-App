@@ -225,6 +225,16 @@ const SurveyForm = () => {
                         </label>
                       </div>
                     ))}
+                    {question.questionType === "rating" && (
+                      <Field
+                          type="number"
+                          name={String(question.surveyId)}
+                          min={question.questionOptions ? JSON.parse(question.questionOptions).min : 1}
+                          max={question.questionOptions ? JSON.parse(question.questionOptions).max : 10}
+                          style={responsiveStyles.input}
+                      />
+                    )}
+
                 </fieldset>
               ))}
               <div>

@@ -5370,7 +5370,8 @@
       "Serilog.Settings.Configuration >= 9.0.0-dev-02304",
       "Serilog.Sinks.Console >= 6.0.0",
       "Serilog.Sinks.File >= 6.0.0",
-      "System.Drawing.Common >= 9.0.0"
+      "System.Drawing.Common >= 9.0.0",
+      "System.Text.Json >= 9.0.0"
     ]
   },
   "packageFolders": {
@@ -5461,6 +5462,10 @@
             "version": "[6.0.0, )"
           },
           "System.Drawing.Common": {
+            "target": "Package",
+            "version": "[9.0.0, )"
+          },
+          "System.Text.Json": {
             "target": "Package",
             "version": "[9.0.0, )"
           }
