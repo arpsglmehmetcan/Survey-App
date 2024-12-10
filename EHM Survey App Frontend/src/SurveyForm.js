@@ -1,100 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import { Formik, Form, Field } from "formik";
 
 const SurveyForm = () => {
-  const { StoreCode } = useParams(); // URL'den StoreCode'u alıyoruz
-  const [storeId, setStoreId] = useState(null); // StoreId burada saklanacak
+  const { StoreCode } = useParams();
+  const navigate = useNavigate();
+  const [storeId, setStoreId] = useState(null);
   const [questions, setQuestions] = useState([]);
-  const [email, setEmail] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
+  const [email, setEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [error, setError] = useState('');
-  const [storeError, setStoreError] = useState('');
+  const [isWaiting, setIsWaiting] = useState(false);
+  const [timer, setTimer] = useState(120); // 2 dakika
+  const [error, setError] = useState("");
+  const [storeError, setStoreError] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const baseURL = 'http://localhost:5139/api';
+  const baseURL = "http://localhost:5139/api";
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        // Store bilgilerini ve soruları alıyoruz
         const response = await axios.get(`${baseURL}/survey/get-survey/${StoreCode}`);
         if (response.status === 200 && response.data.length > 0) {
-          setStoreId(response.data[0].storeId); // İlk anketin StoreId'sini set ediyoruz
-          setQuestions(response.data); // Soruları set ediyoruz
+          setStoreId(response.data[0].storeId);
+          setQuestions(response.data);
         } else {
-          setStoreError('Mağaza bulunamadı veya anket sorusu yok.');
+          setStoreError("Mağaza bulunamadı veya anket sorusu yok.");
         }
       } catch (error) {
-        setStoreError('Bir hata oluştu. Mağaza bilgisi alınamadı.');
+        setStoreError("Bir hata oluştu. Mağaza bilgisi alınamadı.");
       }
     };
 
     fetchQuestions();
 
-    // Ekran boyut değişikliklerini izlemek için event listener ekleme
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [StoreCode]);
+
+  /*
+  useEffect(() => {
+    if (isWaiting && timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else if (timer === 0) {
+      setIsWaiting(false);
+      setTimer(120); // Süreyi sıfırla
+    }
+  }, [isWaiting, timer]);
+  */
 
   const generateInitialValues = () => {
     const initialValues = {};
     questions.forEach((q) => {
-      initialValues[q.surveyId] = q.questionType === 'checkbox' ? [] : '';
+      initialValues[q.surveyId] = q.questionType === "checkbox" ? [] : "";
     });
     return initialValues;
   };
 
-  const handleEmailChange = (e) => {
-    const input = e.target.value;
-    setEmail(input);
-    if (!validateEmail(input)) {
-      setError("Geçerli bir e-posta adresi giriniz. Türkçe karakterler destekleniyor.");
-    } else {
-      setError("");
-    }
-  };
-
   const validateEmail = (email) => {
-    // Türkçe karakterleri destekleyen e-posta regex
     const emailRegex = /^[a-zA-Z0-9ğüşıöçĞÜŞİÖÇ._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
 
   const handleSendCode = async (values) => {
     if (!email || !validateEmail(email)) {
-      showError('Lütfen geçerli bir e-posta adresi giriniz.');
+      setError("Lütfen geçerli bir e-posta adresi giriniz.");
       return;
     }
 
     if (!storeId) {
-      showError('StoreId alınamadı. Lütfen sayfayı yenileyin.');
+      setError("StoreId alınamadı. Lütfen sayfayı yenileyin.");
+      return;
+    }
+
+    if (isWaiting) {
+      setError("Lütfen 2 dakika bekleyiniz.");
       return;
     }
 
     try {
       const response = await axios.post(`${baseURL}/surveyresponse`, {
         Email: email,
-        StoreCode, // URL'den alınan StoreCode
-        StoreId: storeId, // Backend'den alınan StoreId
-        Responses: JSON.stringify(values), // Yanıtlar JSON formatında
+        StoreCode,
+        StoreId: storeId,
+        Responses: JSON.stringify(values),
       });
 
       if (response.data.message) {
         setIsCodeSent(true);
+        setIsWaiting(true);
+        setTimer(120);
         alert(response.data.message);
       }
     } catch (error) {
-      showError('Doğrulama kodu gönderilirken bir hata oluştu.');
+      setError("Doğrulama kodu gönderilirken bir hata oluştu.");
     }
   };
+      
 
   const handleVerifyCode = async () => {
     try {
@@ -104,75 +115,65 @@ const SurveyForm = () => {
       });
 
       if (response.data.message) {
-        setIsVerified(true);
-        alert('Doğrulama başarılı! Cevaplarınız kaydedildi.');
-      } else {
-        showError('Doğrulama kodu hatalı.');
+        alert("Doğrulama başarılı! Cevaplarınız kaydedildi.");
+        navigate("/thank-you"); // Başarıyla doğrulandıktan sonra yönlendirme
       }
     } catch (error) {
-      showError('Doğrulama sırasında hata oluştu.');
+      if (error.response && error.response.data.error) {
+        setError(error.response.data.error); // Hata mesajını backend'den al
+      } else {
+        setError("Doğrulama sırasında bir hata oluştu.");
+      }
     }
-  };
-
-  const showError = (message) => {
-    setError(message);
-    setTimeout(() => {
-      setError('');
-    }, 3000);
   };
 
   const responsiveStyles = {
     surveyContainer: {
-      padding: '40px',
-      display: 'flex',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      alignItems: 'center',
-      position: 'relative',
+      padding: "40px",
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      alignItems: "center",
     },
     surveyForm: {
-      maxWidth: windowWidth > 768 ? '500px' : '90%',
-      backgroundColor: '#f1f1f1',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      maxWidth: windowWidth > 768 ? "500px" : "90%",
+      backgroundColor: "#f1f1f1",
+      padding: "20px",
+      borderRadius: "8px",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     },
     label: {
-      fontWeight: 'bold',
-      display: 'block',
-      marginBottom: '10px',
+      fontWeight: "bold",
+      display: "block",
+      marginBottom: "10px",
     },
     input: {
-      width: '100%',
-      padding: '12px',
-      marginBottom: '15px',
-      border: '1px solid #ddd',
-      borderRadius: '5px',
+      width: "100%",
+      padding: "12px",
+      marginBottom: "15px",
+      border: "1px solid #ddd",
+      borderRadius: "5px",
     },
     button: {
-      width: '100%',
-      padding: '12px',
-      backgroundColor: '#28a745',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '5px',
-      cursor: 'pointer',
-      marginTop: '10px',
+      width: "100%",
+      padding: "12px",
+      backgroundColor: "#28a745",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      marginTop: "10px",
     },
     errorMessage: {
-      color: 'red',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: '10px',
-      border: '1px solid red',
-      padding: '10px',
-      borderRadius: '5px',
-      backgroundColor: '#ffe5e5',
+      color: "red",
+      fontWeight: "bold",
+      textAlign: "center",
+      marginBottom: "10px",
     },
     h2: {
-      color: '#1c45b0',
-      textAlign: 'center',
-      marginBottom: '20px',
+      color: "#1c45b0",
+      textAlign: "center",
+      marginBottom: "20px",
     },
   };
 
@@ -181,21 +182,14 @@ const SurveyForm = () => {
       {storeError ? (
         <div style={responsiveStyles.errorMessage}>{storeError}</div>
       ) : (
-        <Formik
-          initialValues={generateInitialValues()}
-          onSubmit={handleSendCode}
-          enableReinitialize
-        >
+        <Formik initialValues={generateInitialValues()} onSubmit={handleSendCode}>
           {({ values }) => (
             <Form style={responsiveStyles.surveyForm}>
               <h2 style={responsiveStyles.h2}>Anket Soruları</h2>
               {questions.map((question) => (
                 <fieldset key={question.surveyId}>
-                  <label style={responsiveStyles.label}>
-                    {question.question}
-                  </label>
-                  {question.questionType === 'radio' &&
-                    question.questionOptions &&
+                  <label style={responsiveStyles.label}>{question.question}</label>
+                  {question.questionType === "radio" &&
                     JSON.parse(question.questionOptions).map((option, index) => (
                       <div key={index}>
                         <label>
@@ -203,25 +197,21 @@ const SurveyForm = () => {
                             type="radio"
                             name={String(question.surveyId)}
                             value={option}
-                            disabled={isCodeSent}
+                            //disabled={isWaiting} // Bekleme süresi varsa form elemanlarını devre dışı bırak
                           />
                           {option}
                         </label>
                       </div>
                     ))}
-
-                  {question.questionType === 'text' && (
+                  {question.questionType === "text" && (
                     <Field
                       type="text"
                       name={String(question.surveyId)}
-                      placeholder="Cevabınızı yazın..."
                       style={responsiveStyles.input}
-                      disabled={isCodeSent}
+                      //disabled={isWaiting} // Bekleme süresi varsa form elemanlarını devre dışı bırak
                     />
                   )}
-
-                  {question.questionType === 'checkbox' &&
-                    question.questionOptions &&
+                  {question.questionType === "checkbox" &&
                     JSON.parse(question.questionOptions).map((option, index) => (
                       <div key={index}>
                         <label>
@@ -229,45 +219,28 @@ const SurveyForm = () => {
                             type="checkbox"
                             name={`${question.surveyId}`}
                             value={option}
-                            disabled={isCodeSent}
+                            //disabled={isWaiting} // Bekleme süresi varsa form elemanlarını devre dışı bırak
                           />
                           {option}
                         </label>
                       </div>
                     ))}
-
-                  {question.questionType === 'rating' && question.questionOptions && (
-                    <Field
-                      type="number"
-                      name={String(question.surveyId)}
-                      min={JSON.parse(question.questionOptions).min}
-                      max={JSON.parse(question.questionOptions).max}
-                      style={responsiveStyles.input}
-                      disabled={isCodeSent}
-                    />
-                  )}
                 </fieldset>
               ))}
-
               <div>
                 <h3>E-posta Adresinizi Giriniz</h3>
                 <input
                   type="text"
                   value={email}
-                  onChange={handleEmailChange}
-                  placeholder="E-posta adresiniz"
-                  required
+                  onChange={(e) => setEmail(e.target.value)}
                   style={responsiveStyles.input}
-                  disabled={isCodeSent}
+                  //disabled={isWaiting}
                 />
-                {error && (
-                  <div style={responsiveStyles.errorMessage}>{error}</div>
-                )}
-                <button type="submit" style={responsiveStyles.button} disabled={isCodeSent}>
+                {isWaiting && <p>{`Kod gönderildi. Lütfen ${timer} saniye bekleyiniz.`}</p>}
+                <button type="submit" style={responsiveStyles.button} /*disabled={isWaiting}*/>
                   Doğrulama Kodu Gönder
                 </button>
               </div>
-
               {isCodeSent && (
                 <>
                   <h3>Doğrulama Kodunu Giriniz</h3>
@@ -275,13 +248,9 @@ const SurveyForm = () => {
                     type="text"
                     value={verificationCode}
                     onChange={(e) => setVerificationCode(e.target.value)}
-                    placeholder="Doğrulama Kodu"
                     style={responsiveStyles.input}
                   />
-                  <button
-                    onClick={handleVerifyCode}
-                    style={responsiveStyles.button}
-                  >
+                  <button onClick={handleVerifyCode} style={responsiveStyles.button}>
                     Doğrula ve Gönder
                   </button>
                 </>
