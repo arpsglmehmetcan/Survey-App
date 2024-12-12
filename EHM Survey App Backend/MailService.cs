@@ -35,7 +35,7 @@ public class MailService
         {
             string verificationCode = GenerateVerificationCode();
 
-            var client = new RestClient("https://sandbox.api.mailtrap.io/api/send/3284033");
+            var client = new RestClient("https://sandbox.api.mailtrap.io/api/send/3264193");
             var request = new RestRequest();
             request.AddHeader("Authorization", $"Bearer {_mailtrapToken}");
             request.AddHeader("Content-Type", "application/json");

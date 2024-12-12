@@ -11,7 +11,7 @@ const SurveyForm = () => {
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [error, setError] = useState("");
+  const [setError] = useState("");
   const [storeError, setStoreError] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -90,7 +90,6 @@ const SurveyForm = () => {
       });
   
       if (response.data.message) {
-        alert("Doğrulama başarılı! Cevaplarınız kaydedildi.");
         navigate("/thank-you");
       }
     } catch (error) {
