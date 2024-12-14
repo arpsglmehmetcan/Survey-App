@@ -50,15 +50,20 @@ namespace EHM_Survey_App.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SurveyId"));
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsRequired")
                         .HasColumnType("bit");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
                     b.Property<string>("Question")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QuestionOptions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QuestionType")

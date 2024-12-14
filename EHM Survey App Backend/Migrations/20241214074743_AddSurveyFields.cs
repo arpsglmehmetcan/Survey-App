@@ -5,12 +5,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EHM_Survey_App.Migrations
 {
-    /// <inheritdoc />
-    public partial class MakeUserAgentNullable : Migration
+    public partial class AddSurveyFields : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Stores tablosu oluşturuluyor
             migrationBuilder.CreateTable(
                 name: "Stores",
                 columns: table => new
@@ -25,6 +24,7 @@ namespace EHM_Survey_App.Migrations
                     table.PrimaryKey("PK_Stores", x => x.StoreId);
                 });
 
+            // SurveyResponses tablosu oluşturuluyor
             migrationBuilder.CreateTable(
                 name: "SurveyResponses",
                 columns: table => new
@@ -54,6 +54,7 @@ namespace EHM_Survey_App.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Surveys tablosu oluşturuluyor
             migrationBuilder.CreateTable(
                 name: "Surveys",
                 columns: table => new
@@ -64,7 +65,9 @@ namespace EHM_Survey_App.Migrations
                     Question = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuestionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuestionOptions = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsRequired = table.Column<bool>(type: "bit", nullable: false)
+                    IsRequired = table.Column<bool>(type: "bit", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false, defaultValue: 0), // Yeni eklenen kolon
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true) // Yeni eklenen kolon
                 },
                 constraints: table =>
                 {
@@ -77,6 +80,7 @@ namespace EHM_Survey_App.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // Indeksler oluşturuluyor
             migrationBuilder.CreateIndex(
                 name: "IX_SurveyResponses_StoreId",
                 table: "SurveyResponses",
@@ -88,9 +92,9 @@ namespace EHM_Survey_App.Migrations
                 column: "StoreId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Tablo ve kolonlar geri alınırken siliniyor
             migrationBuilder.DropTable(
                 name: "SurveyResponses");
 

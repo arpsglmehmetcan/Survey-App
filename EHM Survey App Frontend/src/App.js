@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import ThankYouPage from "./ThankYouPage";
+import SurveyEdit from './SurveyEdit';
 
 function App() {
   /*useEffect(() => {
@@ -63,6 +64,7 @@ function App() {
             />
             <Route path="/survey/:StoreCode" element={<SurveyForm />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
+            <Route path="/survey-edit/:StoreCode" element={<SurveyEdit />} />
           </Routes>
         </main>
         <footer

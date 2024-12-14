@@ -18,29 +18,29 @@ const SurveyForm = () => {
   const baseURL = "http://localhost:5139/api";
 
   useEffect(() => {
-    const fetchQuestions = async () => {
+    const fetchActiveQuestions = async () => {
       try {
-        const response = await axios.get(`${baseURL}/survey/get-survey/${StoreCode}`);
+        const response = await axios.get(`${baseURL}/survey/get-active-survey/${StoreCode}`);
         if (response.status === 200 && response.data.length > 0) {
           setStoreId(response.data[0].storeId);
-          setQuestions(response.data);
+          setQuestions(response.data); // Sadece aktif soruları al
         } else {
-          setStoreError("Mağaza bulunamadı veya anket sorusu yok.");
+          setStoreError("Mağaza bulunamadı veya aktif anket sorusu yok.");
         }
       } catch (error) {
         setStoreError("Bir hata oluştu. Mağaza bilgisi alınamadı.");
       }
     };
-
-    fetchQuestions();
-
+  
+    fetchActiveQuestions();
+  
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
+  
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [StoreCode]);
+  }, [StoreCode]);  
 
   const generateInitialValues = () => {
     const initialValues = {};
@@ -149,6 +149,13 @@ const SurveyForm = () => {
       textAlign: "center",
       marginBottom: "20px",
     },
+    input2: {
+      width: "20%",
+      padding: "12px",
+      marginBottom: "15px",
+      border: "1px solid #ddd",
+      borderRadius: "5px",
+    }
   };
 
   return (
@@ -205,7 +212,7 @@ const SurveyForm = () => {
                       name={String(question.surveyId)}
                       min={question.questionOptions ? JSON.parse(question.questionOptions).min : 1}
                       max={question.questionOptions ? JSON.parse(question.questionOptions).max : 10}
-                      style={responsiveStyles.input}
+                      style={responsiveStyles.input2}
                     />
                   )}
                 </fieldset>

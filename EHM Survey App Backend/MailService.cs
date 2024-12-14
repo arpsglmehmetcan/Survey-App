@@ -41,19 +41,20 @@ public class MailService
             request.AddHeader("Content-Type", "application/json");
 
             string payload = $@"
-            {{
-                ""from"": {{ ""email"": ""{_fromEmail}"", ""name"": ""{_fromName}"" }},
-                ""to"": [{{ ""email"": ""{toEmail}"" }}],
-                ""subject"": ""Verification Code: {verificationCode}"",
-                ""text"": ""Your verification code is: {verificationCode}""
-            }}";
+        {{
+            ""from"": {{ ""email"": ""{_fromEmail}"", ""name"": ""{_fromName}"" }},
+            ""to"": [{{ ""email"": ""{toEmail}"" }}],
+            ""subject"": ""Verification Code: {verificationCode}"",
+            ""text"": ""Your verification code is: {verificationCode}""
+        }}";
 
             request.AddParameter("application/json", payload, ParameterType.RequestBody);
             var response = await client.ExecutePostAsync(request);
 
             if (response.IsSuccessful)
             {
-                Log.Error("Mail gönderim hatası: {@ResponseContent}", response.Content);
+                // Başarılı durumlarda
+                Log.Information("Mail başarıyla gönderildi: {@ResponseContent}", response.Content);
                 return new MailResult
                 {
                     IsSuccessful = true,
@@ -61,6 +62,8 @@ public class MailService
                 };
             }
 
+            // Başarısız durumlarda
+            Log.Error("Mail gönderim hatası: {@ResponseContent}", response.Content);
             return new MailResult
             {
                 IsSuccessful = false,
@@ -69,25 +72,12 @@ public class MailService
         }
         catch (Exception ex)
         {
+            Log.Error("Mail gönderimi sırasında bir hata oluştu: {ErrorMessage}", ex.Message);
             return new MailResult
             {
                 IsSuccessful = false,
                 ErrorMessage = ex.Message
             };
         }
-    }
-
-    public Task<MailResult> VerifyCode(string inputCode, string actualCode)
-    {
-        if (inputCode == actualCode)
-        {
-            return Task.FromResult(new MailResult { IsSuccessful = true });
-        }
-
-        return Task.FromResult(new MailResult
-        {
-            IsSuccessful = false,
-            ErrorMessage = "Doğrulama kodu hatalı."
-        });
     }
 }
