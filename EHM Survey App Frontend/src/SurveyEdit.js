@@ -107,108 +107,132 @@ const SurveyEdit = () => {
 
   // Soruların sırasını güncelle
   const handleDragEnd = async (result) => {
-    if (!result.destination) return;
-
+    if (!result.destination || questions.length === 0) return;
+  
     const reorderedQuestions = Array.from(questions);
     const [movedItem] = reorderedQuestions.splice(result.source.index, 1);
     reorderedQuestions.splice(result.destination.index, 0, movedItem);
-
+  
     setQuestions(reorderedQuestions);
-
+  
     try {
-      const reorderedIds = reorderedQuestions.map((q, index) => ({
-        surveyId: q.surveyId,
-        order: index + 1,
+      const reorderedData = reorderedQuestions.map((q, index) => ({
+        surveyId: q.surveyId, // Backend'teki SurveyId
+        order: index + 1,     // Yeni sıra numarası
       }));
-
-      await axios.patch(`${baseURL}/survey/update-survey-order`, reorderedIds);
+  
+      console.log("Gönderilen veri:", reorderedData); // Test için 
+      await axios.patch(`${baseURL}/survey/update-survey-order`, reorderedData);
     } catch (err) {
       setError("Sıra güncellenirken bir hata oluştu.");
       console.error(err);
     }
   };
-
+  
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Anket Soruları Düzenle - {StoreCode}</h1>
+      <h1 style={{color: "#1c45b0"}}>Anket Soruları Düzenle - {StoreCode}</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="questions">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {questions.map((question, index) => (
-                <Draggable
-                  key={question.surveyId}
-                  draggableId={String(question.surveyId)}
-                  index={index}
+  {questions.length > 0 ? (
+    <Droppable droppableId="questions">
+      {(provided) => (
+        <div {...provided.droppableProps} ref={provided.innerRef}>
+          {questions.map((question, index) => (
+            <Draggable
+              key={String(question.surveyId)}
+              draggableId={String(question.surveyId)}
+              index={index}
+            >
+              {(provided, snapshot) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  style={{
+                    ...provided.draggableProps.style,
+                    border: "2px solid #2196f3",
+                    borderRadius: "8px",
+                    marginBottom: "15px",
+                    padding: "15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    backgroundColor: snapshot.isDragging
+                      ? "#e3f2fd"
+                      : "#ffffff",
+                    boxShadow: snapshot.isDragging
+                      ? "0 5px 10px rgba(0, 0, 0, 0.2)"
+                      : "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    transition: "transform 0.2s ease-in-out",
+                  }}
                 >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
+                  {/* Sol tarafta soru detayları */}
+                  <div 
+                  className="question-details"
+                  style={{ flex: 1 }}
+                  >
+                    <p style={{ margin: "0", fontWeight: "bold" }}>{question.question}</p>
+                          <p style={{ margin: "5px 0 0" }}>Type: {question.questionType}</p>
+                          <p style={{ margin: "5px 0 0" }}>
+                            Aktif: {question.isActive ? "Evet" : "Hayır"}
+                          </p>
+                  </div>
+
+                  {/* Sağ tarafta küçük butonlar */}
+                  <div 
+                  style={{ display: "flex", gap: "5px" }}
+                  className="question-actions">
+                    <button
+                      onClick={() => handleDeleteQuestion(question.surveyId)}
                       style={{
-                        padding: "10px",
-                        margin: "10px 0",
-                        backgroundColor: "#f9f9f9",
+                        backgroundColor: "#f44336",
+                        color: "#fff",
+                        border: "none",
                         borderRadius: "5px",
-                        boxShadow: "0 0 5px rgba(0,0,0,0.1)",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                        fontSize: "0.8rem",
                       }}
                     >
-                      <div>
-                        <p>
-                          <strong>{question.question}</strong>
-                        </p>
-                        <p>Tip: {question.questionType}</p>
-                        <p>Aktif: {question.isActive ? "Evet" : "Hayır"}</p>
-                      </div>
-                      <div>
-                        <button
-                          onClick={() => handleDeleteQuestion(question.surveyId)}
-                          style={{
-                            marginRight: "10px",
-                            backgroundColor: "red",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "3px",
-                            padding: "5px 10px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Sil
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleUpdateQuestion(question.surveyId, {
-                              ...question,
-                              isActive: !question.isActive,
-                            })
-                          }
-                          style={{
-                            backgroundColor: question.isActive ? "gray" : "green",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "3px",
-                            padding: "5px 10px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          {question.isActive ? "Deaktif Et" : "Aktif Et"}
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+                      Sil
+                    </button>
+                    <button
+                      className="deactivate"
+                      style={{
+                        backgroundColor: question.isActive ? "#757575" : "#4caf50",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "5px",
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                        fontSize: "0.8rem",
+                      }}
+                      onClick={() =>
+                        handleUpdateQuestion(question.surveyId, {
+                          ...question,
+                          isActive: !question.isActive,
+                        })
+                      }
+                    >
+                      {question.isActive ? "Deaktif Et" : "Aktif Et"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </Draggable>
+          ))}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+  ) : (
+    <p>Yüklenmiş soru bulunmamaktadır.</p>
+  )}
+</DragDropContext>
+
+      {/* Yeni soru ekleme bölümü */}
 
       <div style={{ marginTop: "20px" }}>
         <h2>Yeni Soru Ekle</h2>

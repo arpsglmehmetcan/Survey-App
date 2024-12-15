@@ -49,8 +49,8 @@ public class SurveyController : ControllerBase
         }
 
         var surveys = await _context.Surveys
-            .Where(s => s.StoreId == store.StoreId && s.IsActive) // Yalnızca aktif soruları al
-            .OrderBy(s => s.Order) // Sıralama
+            .Where(s => s.StoreId == store.StoreId && s.IsActive)
+            .OrderBy(s => s.Order) // Order'a göre sırala
             .ToListAsync();
 
         if (surveys == null || !surveys.Any())
@@ -60,6 +60,7 @@ public class SurveyController : ControllerBase
 
         return Ok(surveys);
     }
+
 
     [HttpPost("submit-response")]
     public async Task<ActionResult<SurveyResponse>> SubmitSurveyResponse(SurveyResponse Response)
@@ -143,19 +144,31 @@ public class SurveyController : ControllerBase
     }
 
     [HttpPatch("update-survey-order")]
-    public async Task<IActionResult> UpdateSurveyOrder([FromBody] List<int> surveyOrder)
+    public async Task<IActionResult> UpdateSurveyOrder([FromBody] List<SurveyOrderUpdate> surveyOrder)
     {
-        for (int i = 0; i < surveyOrder.Count; i++)
+        if (surveyOrder == null || !surveyOrder.Any())
         {
-            var survey = await _context.Surveys.FindAsync(surveyOrder[i]);
+            return BadRequest("Geçersiz veri: Sıralama listesi boş.");
+        }
+
+        foreach (var item in surveyOrder)
+        {
+            var survey = await _context.Surveys.FindAsync(item.SurveyId);
             if (survey != null)
             {
-                survey.Order = i + 1; // Yeni sıralama
+                survey.Order = item.Order; // Yeni sıralamayı güncelle
             }
         }
 
         await _context.SaveChangesAsync();
-        return Ok("Sıralama güncellendi");
+        return Ok("Sıralama başarıyla güncellendi.");
     }
+
+    public class SurveyOrderUpdate
+    {
+        public int SurveyId { get; set; }
+        public int Order { get; set; }
+    }
+
 
 }
