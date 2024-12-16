@@ -52,15 +52,20 @@ function App() {
           style={{
             flex: '1',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
           }}
         >
           <Routes>
             <Route
               path="/"
               element={
-                <p style={{ textAlign: 'center', fontSize: '1.5rem' }}>
+                <p style={{ 
+                  textAlign: 'center',
+                   fontSize: '1.5rem',
+                   marginTop: '15%',
+                   }}>
                   Lütfen bulunduğunuz mağazanın QR kodunu okutun
                 </p>
               }

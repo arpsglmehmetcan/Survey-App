@@ -37,7 +37,13 @@ const AdminPanel = () => {
 
   return (
     <div style={{ textAlign: "center", padding: '1%' }}>
-      <h1 style={{ color: "#1c45b0", marginBottom: "10%", fontSize: 'clamp(1.5rem, 5vw, 3rem)' }}>
+      <h1 style={{
+        color: "#1c45b0",
+        marginTop: "0",
+        marginBottom: "2%",
+        fontSize: 'clamp(1.5rem, 5vw, 3rem)',
+        textAlign: "center",
+      }}>
         - Admin Paneli -
       </h1>
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -46,7 +52,7 @@ const AdminPanel = () => {
           style={{
             width: "80%",
             margin: "0 auto",
-            padding: "10px",
+            padding: "4%",
             fontSize: "18px",
             fontWeight: "bold",
             backgroundColor: "#000",
@@ -63,7 +69,7 @@ const AdminPanel = () => {
           style={{
             width: "80%",
             margin: "0 auto",
-            padding: "10px",
+            padding: "4%",
             fontSize: "18px",
             fontWeight: "bold",
             backgroundColor: "#000",
