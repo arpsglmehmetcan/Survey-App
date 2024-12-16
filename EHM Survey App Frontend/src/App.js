@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 import ThankYouPage from "./ThankYouPage";
 import SurveyEdit from './SurveyEdit';
+import LoginPage from './LoginPage';
+import AdminPanel from "./AdminPanel";
+import SurveyResults from "./SurveyResults";
 
 function App() {
   /*useEffect(() => {
@@ -65,6 +68,9 @@ function App() {
             <Route path="/survey/:StoreCode" element={<SurveyForm />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
             <Route path="/survey-edit/:StoreCode" element={<SurveyEdit />} />
+            <Route path="/survey-results" element={<SurveyResults />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/admin-panel" element={<AdminPanel />} />
           </Routes>
         </main>
         <footer
