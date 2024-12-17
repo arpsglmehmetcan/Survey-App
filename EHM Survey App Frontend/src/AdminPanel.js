@@ -11,24 +11,43 @@ const AdminPanel = () => {
   });
 
   useEffect(() => {
-    // LocalStorage'dan kullanıcı bilgilerini al (giriş yapıldıktan sonra tutulur)
     const storedUser = JSON.parse(localStorage.getItem("userData"));
+    console.log("Stored User:", storedUser); // Debug için ekleyin
     if (storedUser) {
       setUserData(storedUser);
-    } /*else {
-      // Kullanıcı giriş yapmamışsa login sayfasına yönlendir
-      navigate("/login");
-    }*/
-  }, [navigate]);
-
-  const handleSurveyEdit = () => {
-    if (userData.storeId) {
-      // Kullanıcıya ait mağaza koduna göre düzenleme sayfasına yönlendir
-      navigate(`/survey-edit/${userData.storeId}`);
     } else {
+      alert("LocalStorage'ta kullanıcı bilgisi bulunamadı.");
+    }
+  }, [navigate]);  
+
+  const handleSurveyEdit = async () => {
+    if (userData.storeId) {
+      try {
+        console.log("StoreId:", userData.storeId); // StoreId'yi kontrol et
+        const response = await fetch(
+          `http://localhost:5139/api/store/get-storecode/${userData.storeId}`
+        );
+  
+        console.log("Response Status:", response.status); // HTTP durum kodu
+        const data = await response.json();
+        console.log("Backend Response:", data); // Gelen cevabı kontrol et
+  
+        if (response.ok) {
+          navigate(`/survey-edit/${data.storeCode}`);
+        } else {
+          console.error("Hata:", data.message);
+          alert("StoreCode bulunamadı!");
+        }
+      } catch (error) {
+        console.error("Fetch Hatası:", error.message);
+        alert("Bir hata oluştu. Lütfen tekrar deneyiniz.");
+      }
+    } else {
+      console.error("userData.storeId bulunamadı.");
       alert("Store bilgisi bulunamadı!");
     }
   };
+  
 
   const handleSurveyResults = () => {
     // Anket sonuçları sayfasına yönlendir

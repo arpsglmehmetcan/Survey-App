@@ -22,8 +22,16 @@ const LoginPage = () => {
       });
   
       if (response.data.success) {
-        const { storeId } = response.data; // Backend'den dönen StoreId
-        navigate(`/admin-panel`); // Kullanıcının bağlı olduğu mağazaya yönlendir
+        const { userName, storeId } = response.data; // Backend'den dönen userName ve storeId
+        
+        // localStorage'a kullanıcı verisini kaydedin
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({ userName, storeId })
+        );
+  
+        // Kullanıcıyı AdminPanel'e yönlendir
+        navigate(`/admin-panel`);
       } else {
         showError(response.data.message || "Kullanıcı adı veya şifre hatalı.");
       }
