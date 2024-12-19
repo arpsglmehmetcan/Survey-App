@@ -1,4 +1,0 @@
-[18:49:38 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4607407556"]}
-[18:51:10 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4607411674"]}
-[19:24:15 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4607470671"]}
-[19:25:12 ERR] Mail gönderim hatası: {"success":true,"message_ids":["4607472472"]}

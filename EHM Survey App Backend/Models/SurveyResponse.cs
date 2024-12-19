@@ -7,20 +7,26 @@ public class SurveyResponse
     [Key]
     public int ResponseId { get; set; }
 
+   [ForeignKey("Store")]
+    public int StoreId { get; set; }
+
+    public Store? Store { get; set; }
+
     [ForeignKey("Survey")]
     public int SurveyId { get; set; }
 
-    [ForeignKey("Store")]
-    public int StoreId { get; set; }
-    public Store? Store { get; set; }
-
     [Required(ErrorMessage = "Soruların cevaplanması gerekiyor")]
     public string Responses { get; set; } = string.Empty; 
+    
+    [ForeignKey("Survey")]
+    public string Question { get; set; } = string.Empty;
+
+    [ForeignKey("Survey")]
+    public string QuestionType { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "E-posta adresi girilmesi gerekiyor")]
     [RegularExpression(@"^[a-zA-Z0-9ğüşıöçĞÜŞİÖÇ._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "Geçersiz e-posta adresi")]
     public string Email { get; set; } = string.Empty;
-
 
     public bool IsVerified { get; set; } = false;
 

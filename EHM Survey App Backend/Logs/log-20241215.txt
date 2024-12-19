@@ -1,3 +1,0 @@
-[01:29:28 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4611245081"]}
-[01:32:15 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4611248485"]}
-[01:33:39 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4611250143"]}

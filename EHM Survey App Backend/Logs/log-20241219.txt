@@ -1,0 +1,19 @@
+[21:16:33 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4620169808"]}
+[21:33:58 ERR] Failed executing DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Stores] (
+    [StoreId] int NOT NULL IDENTITY,
+    [StoreCode] nvarchar(max) NOT NULL,
+    [StoreName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Stores] PRIMARY KEY ([StoreId])
+);
+[21:58:04 ERR] Failed executing DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Stores] (
+    [StoreId] int NOT NULL IDENTITY,
+    [StoreCode] nvarchar(max) NOT NULL,
+    [StoreName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Stores] PRIMARY KEY ([StoreId])
+);
+[22:07:56 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4620235431"]}
+[22:13:45 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4620240298"]}
+[22:15:18 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4620241718"]}
+[22:23:36 INF] Mail başarıyla gönderildi: {"success":true,"message_ids":["4620251179"]}

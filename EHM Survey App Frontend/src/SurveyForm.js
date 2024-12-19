@@ -11,7 +11,7 @@ const SurveyForm = () => {
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [setError] = useState("");
+  const [error, setError] = useState("");
   const [storeError, setStoreError] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -31,16 +31,16 @@ const SurveyForm = () => {
         setStoreError("Bir hata oluştu. Mağaza bilgisi alınamadı.");
       }
     };
-  
+
     fetchActiveQuestions();
-  
+
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-  
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [StoreCode]);  
+  }, [StoreCode]);
 
   const generateInitialValues = () => {
     const initialValues = {};
@@ -60,14 +60,20 @@ const SurveyForm = () => {
       setError("Lütfen geçerli bir e-posta adresi giriniz.");
       return;
     }
-  
+
+    // Yanıtları JSON formatına dönüştür
+    const responses = questions.reduce((acc, question) => {
+      acc[question.surveyId] = values[question.surveyId];
+      return acc;
+    }, {});
+
     try {
       const response = await axios.post(`${baseURL}/surveyresponse/send-code`, {
         Email: email,
         StoreId: storeId,
-        Responses: JSON.stringify(values),
+        Responses: JSON.stringify(responses),
       });
-  
+
       if (response.data.message) {
         setIsCodeSent(true);
         alert(response.data.message);
@@ -82,13 +88,19 @@ const SurveyForm = () => {
   };
 
   const handleVerifyCode = async (values) => {
+    // Yanıtları JSON formatına dönüştür
+    const responses = questions.reduce((acc, question) => {
+      acc[question.surveyId] = values[question.surveyId];
+      return acc;
+    }, {});
+
     try {
       const response = await axios.post(`${baseURL}/surveyresponse/verify`, {
         Email: email,
         VerificationCode: verificationCode,
-        Responses: JSON.stringify(values),
+        Responses: JSON.stringify(responses),
       });
-  
+
       if (response.data.message) {
         navigate("/thank-you");
       }
@@ -155,7 +167,7 @@ const SurveyForm = () => {
       marginBottom: "15px",
       border: "1px solid #ddd",
       borderRadius: "5px",
-    }
+    },
   };
 
   return (

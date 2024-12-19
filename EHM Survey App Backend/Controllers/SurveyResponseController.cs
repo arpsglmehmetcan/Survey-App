@@ -25,7 +25,7 @@ public class SurveyResponseController : ControllerBase
         }
 
         // Soruların kontrolü
-        if (string.IsNullOrWhiteSpace(request.Responses) || !request.Responses.Any())
+        if (string.IsNullOrWhiteSpace(request.Responses))
         {
             return BadRequest(new { error = "Soruların tamamını cevaplamanız gerekiyor." });
         }
@@ -37,29 +37,45 @@ public class SurveyResponseController : ControllerBase
             return NotFound("Mağaza bulunamadı.");
         }
 
-        // Email alanını kullanarak doğrulama kodu gönderimi
+        // Yanıtların işlenmesi
+        var responses = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(request.Responses)
+                        ?? new Dictionary<int, string>();
+
+        // Doğrulama kodu gönder
         var mailResult = await _mailService.SendVerificationCode(request.Email);
         if (!mailResult.IsSuccessful)
         {
             return StatusCode(500, $"Doğrulama kodu gönderilirken bir hata oluştu: {mailResult.ErrorMessage}");
         }
 
-        // Temp olarak doğrulama kodunu kaydet
-        var response = new SurveyResponse
+        foreach (var response in responses)
         {
-            Email = request.Email,
-            StoreId = request.StoreId,
-            VerificationCode = mailResult.VerificationCode ?? string.Empty,
-            IsVerified = false,
-            SubmissonDate = DateTime.UtcNow
-        };
+            var survey = await _context.Surveys.FirstOrDefaultAsync(s => s.SurveyId == response.Key);
+            if (survey == null)
+            {
+                continue; // Survey bulunamazsa geç
+            }
 
-        _context.SurveyResponses.Add(response);
+            // Her cevap için bir SurveyResponse kaydı oluştur
+            var surveyResponse = new SurveyResponse
+            {
+                Email = request.Email,
+                StoreId = request.StoreId,
+                Responses = response.Value,
+                Question = survey.Question,
+                QuestionType = survey.QuestionType,
+                VerificationCode = mailResult.VerificationCode ?? string.Empty,
+                IsVerified = false,
+                SubmissonDate = DateTime.UtcNow
+            };
+
+            _context.SurveyResponses.Add(surveyResponse);
+        }
+
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Doğrulama kodu gönderildi." });
     }
-
 
     [HttpPost("verify")]
     public async Task<IActionResult> VerifyEmailCode([FromBody] SurveyResponse request)
@@ -69,21 +85,38 @@ public class SurveyResponseController : ControllerBase
             return BadRequest(new { error = "E-posta ve doğrulama kodu gerekli." });
         }
 
-        // Database'den doğrulama kodunu kontrol et
-        var response = await _context.SurveyResponses
-            .FirstOrDefaultAsync(r => r.Email == request.Email && !r.IsVerified);
+        // Doğrulama kodunu ve e-posta adresini kontrol et
+        var responses = await _context.SurveyResponses
+            .Where(r => r.Email == request.Email && !r.IsVerified)
+            .ToListAsync();
 
-        if (response == null || response.VerificationCode != request.VerificationCode)
+        if (!responses.Any())
+        {
+            return BadRequest(new { error = "Doğrulama için kayıt bulunamadı." });
+        }
+
+        // İlk kaydın doğrulama kodunu kontrol et
+        if (responses.First().VerificationCode != request.VerificationCode)
         {
             return BadRequest(new { error = "Geçersiz doğrulama kodu." });
         }
 
-        // Doğrulama başarılı, yanıtları kaydet
-        response.IsVerified = true;
-        response.Responses = request.Responses; // Cevapları ekle
+        // JSON formatındaki yanıtları işleme
+        var parsedResponses = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<int, string>>(request.Responses);
+        foreach (var response in responses)
+        {
+            if (parsedResponses.TryGetValue(response.SurveyId, out var answer))
+            {
+                response.Responses = answer;
+            }
+
+            // Doğrulama başarılı olduğu için `IsVerified` alanını true yap
+            response.IsVerified = true;
+        }
+
         await _context.SaveChangesAsync();
 
         return Ok(new { message = "Doğrulama başarılı! Yanıtlar kaydedildi." });
     }
-}
 
+}
