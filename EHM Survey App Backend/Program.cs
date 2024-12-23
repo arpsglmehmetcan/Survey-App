@@ -7,7 +7,8 @@ using Serilog;
 using System;
 using System.Linq;
 using System.IO; // Log dosyaları için gerekli
-using static LogCleaner; // Log temizleme işlemi için
+using AutoMapper;
+using EHM_Survey_App_Backend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,9 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Add DbContext with SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -40,6 +44,7 @@ builder.Services.AddSingleton(new MailService(mailtrapToken, fromEmail, fromName
 // Add custom services
 builder.Services.AddScoped<QRCodeGeneratorService>(provider =>
     new QRCodeGeneratorService("http://localhost:5139/api/survey"));
+builder.Services.AddScoped<HashExistingPasswords>();
 
 // Configure CORS to allow all origins, methods, and headers
 builder.Services.AddCors(options =>
@@ -62,9 +67,21 @@ using (var scope = app.Services.CreateScope())
 {
     var qrCodeService = scope.ServiceProvider.GetRequiredService<QRCodeGeneratorService>();
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var passwordHasherService = scope.ServiceProvider.GetRequiredService<HashExistingPasswords>();
 
+    // Existing passwords hash'leme
+    try
+    {
+        await passwordHasherService.HashPasswordsAsync();
+        Console.WriteLine("Mevcut şifreler başarıyla hash'lenmiştir.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Şifre hash'leme sırasında hata: {ex.Message}");
+    }
+
+    // QR kod oluşturma
     var storeCodes = dbContext.Stores.Select(s => s.StoreCode).ToList();
-
     foreach (var storeCode in storeCodes)
     {
         try

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using EHM_Survey_App_Backend.Models.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -10,15 +12,17 @@ public class SurveyController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly QRCodeGeneratorService _qrCodeGeneratorService;
+    private readonly IMapper _mapper;
 
-    public SurveyController(AppDbContext context, QRCodeGeneratorService qrCodeGeneratorService)
+    public SurveyController(AppDbContext context, QRCodeGeneratorService qrCodeGeneratorService, IMapper mapper)
     {
         _context = context;
         _qrCodeGeneratorService = qrCodeGeneratorService;
+        _mapper = mapper;
     }
 
     [HttpGet("get-survey/{StoreCode}")]
-    public async Task<ActionResult<IEnumerable<Survey>>> GetSurveyByStore(string StoreCode)
+    public async Task<ActionResult<IEnumerable<SurveyDTO>>> GetSurveyByStore(string StoreCode)
     {
         var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreCode == StoreCode);
         if (store == null)
@@ -27,7 +31,7 @@ public class SurveyController : ControllerBase
         }
 
         var surveys = await _context.Surveys
-            .Where(s => s.StoreId == store.StoreId) // IsActive filtresi yok, bu yüzden tüm soruları alır
+            .Where(s => s.StoreId == store.StoreId)
             .OrderBy(s => s.Order)
             .ToListAsync();
 
@@ -36,11 +40,12 @@ public class SurveyController : ControllerBase
             return NotFound(new { message = "Bu mağaza için anket sorusu bulunamadı." });
         }
 
-        return Ok(surveys);
+        var surveyDTOs = _mapper.Map<List<SurveyDTO>>(surveys);
+        return Ok(surveyDTOs);
     }
 
     [HttpGet("get-active-survey/{StoreCode}")]
-    public async Task<ActionResult<IEnumerable<Survey>>> GetActiveSurveyByStore(string StoreCode)
+    public async Task<ActionResult<IEnumerable<SurveyDTO>>> GetActiveSurveyByStore(string StoreCode)
     {
         var store = await _context.Stores.FirstOrDefaultAsync(s => s.StoreCode == StoreCode);
         if (store == null)
@@ -50,7 +55,7 @@ public class SurveyController : ControllerBase
 
         var surveys = await _context.Surveys
             .Where(s => s.StoreId == store.StoreId && s.IsActive)
-            .OrderBy(s => s.Order) // Order'a göre sırala
+            .OrderBy(s => s.Order)
             .ToListAsync();
 
         if (surveys == null || !surveys.Any())
@@ -58,29 +63,31 @@ public class SurveyController : ControllerBase
             return NotFound(new { message = "Bu mağaza için aktif anket sorusu bulunamadı." });
         }
 
-        return Ok(surveys);
+        var surveyDTOs = _mapper.Map<List<SurveyDTO>>(surveys);
+        return Ok(surveyDTOs);
     }
 
-
     [HttpPost("submit-response")]
-    public async Task<ActionResult<SurveyResponse>> SubmitSurveyResponse(SurveyResponse Response)
+    public async Task<IActionResult> SubmitSurveyResponse([FromBody] SurveyResponseDTO responseDTO)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var store = await _context.Stores.FindAsync(Response.StoreId);
+        var store = await _context.Stores.FindAsync(responseDTO.StoreId);
         if (store == null)
         {
             return NotFound("Mağaza bulunamadı.");
         }
 
-        Response.SubmissonDate = DateTime.UtcNow;
-        _context.SurveyResponses.Add(Response);
+        var response = _mapper.Map<SurveyResponse>(responseDTO);
+        response.SubmissonDate = DateTime.UtcNow;
+
+        _context.SurveyResponses.Add(response);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetSurveyByStore), new { StoreCode = store.StoreCode }, Response);
+        return CreatedAtAction(nameof(GetSurveyByStore), new { StoreCode = store.StoreCode }, responseDTO);
     }
 
     [HttpGet("generate-qrcode/{StoreCode}")]
@@ -97,20 +104,21 @@ public class SurveyController : ControllerBase
     }
 
     [HttpPost("add-survey")]
-    public async Task<IActionResult> AddSurvey([FromBody] Survey newSurvey)
+    public async Task<IActionResult> AddSurvey([FromBody] SurveyDTO surveyDTO)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest("Geçersiz veri");
         }
 
+        var newSurvey = _mapper.Map<Survey>(surveyDTO);
         _context.Surveys.Add(newSurvey);
         await _context.SaveChangesAsync();
         return Ok("Soru başarıyla eklendi");
     }
 
     [HttpPut("update-survey/{id}")]
-    public async Task<IActionResult> UpdateSurvey(int id, [FromBody] Survey updatedSurvey)
+    public async Task<IActionResult> UpdateSurvey(int id, [FromBody] SurveyDTO surveyDTO)
     {
         var existingSurvey = await _context.Surveys.FindAsync(id);
         if (existingSurvey == null)
@@ -118,14 +126,9 @@ public class SurveyController : ControllerBase
             return NotFound("Soru bulunamadı");
         }
 
-        existingSurvey.Question = updatedSurvey.Question;
-        existingSurvey.QuestionType = updatedSurvey.QuestionType;
-        existingSurvey.QuestionOptions = updatedSurvey.QuestionOptions;
-        existingSurvey.IsRequired = updatedSurvey.IsRequired;
-        existingSurvey.Order = updatedSurvey.Order;
-        existingSurvey.IsActive = updatedSurvey.IsActive;
-
+        _mapper.Map(surveyDTO, existingSurvey); // Map updated DTO fields to the existing survey
         await _context.SaveChangesAsync();
+
         return Ok("Soru başarıyla güncellendi");
     }
 
@@ -144,19 +147,19 @@ public class SurveyController : ControllerBase
     }
 
     [HttpPatch("update-survey-order")]
-    public async Task<IActionResult> UpdateSurveyOrder([FromBody] List<SurveyOrderUpdate> surveyOrder)
+    public async Task<IActionResult> UpdateSurveyOrder([FromBody] List<SurveyOrderUpdateDTO> surveyOrderDTOs)
     {
-        if (surveyOrder == null || !surveyOrder.Any())
+        if (surveyOrderDTOs == null || !surveyOrderDTOs.Any())
         {
             return BadRequest("Geçersiz veri: Sıralama listesi boş.");
         }
 
-        foreach (var item in surveyOrder)
+        foreach (var dto in surveyOrderDTOs)
         {
-            var survey = await _context.Surveys.FindAsync(item.SurveyId);
+            var survey = await _context.Surveys.FindAsync(dto.SurveyId);
             if (survey != null)
             {
-                survey.Order = item.Order; // Yeni sıralamayı güncelle
+                survey.Order = dto.Order;
             }
         }
 

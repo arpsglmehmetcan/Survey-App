@@ -10,8 +10,9 @@ namespace EHM_Survey_App_Backend.Models
         [Key]
         public int UserId { get; set; }
 
-        [Required(ErrorMessage = "Kullanıcı adı girilmelidir.")]
-        public string UserName { get; set; } = string.Empty;
+        [Required(ErrorMessage = "E-posta adresi girilmelidir.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi girilmelidir.")]
+        public string UserMail { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Şifre girilmelidir.")]
         public string Password { get; set; } = string.Empty;

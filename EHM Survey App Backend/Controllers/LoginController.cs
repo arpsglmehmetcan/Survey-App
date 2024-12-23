@@ -18,14 +18,14 @@ public class LoginController : ControllerBase
     [HttpPost("login")]
 public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
 {
-    if (loginRequest == null || string.IsNullOrEmpty(loginRequest.UserName) || string.IsNullOrEmpty(loginRequest.Password))
+    if (loginRequest == null || string.IsNullOrEmpty(loginRequest.UserMail) || string.IsNullOrEmpty(loginRequest.Password))
     {
-        return BadRequest(new { success = false, message = "Kullanıcı adı ve şifre gereklidir." });
+        return BadRequest(new { success = false, message = "E-posta ve şifre gereklidir." });
     }
 
     // Kullanıcıyı kontrol et
     var user = await _context.UserRole
-        .Where(u => u.UserName == loginRequest.UserName)
+        .Where(u => u.UserMail == loginRequest.UserMail)
         .FirstOrDefaultAsync();
 
     // Kullanıcı adı kontrolü
@@ -35,9 +35,9 @@ public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     }
 
     // Şifre kontrolü
-    if (user.Password != loginRequest.Password)
+    if (!PasswordHasher.VerifyPassword(loginRequest.Password, user.Password))
     {
-        return Unauthorized(new { success = false, message = "Kullanıcı adı veya şifre yanlış." });
+        return Unauthorized(new { success = false, message = "E-posta veya şifre yanlış." });
     }
 
     // Giriş başarılı
@@ -45,7 +45,7 @@ public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
         success = true,
         StoreId = user.StoreId,
-        UserName = user.UserName,
+        UserMail = user.UserMail,
         message = "Giriş başarılı."
     });
 }
@@ -54,7 +54,7 @@ public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     // Giriş Bilgilerini Taşıyan Sınıf
     public class LoginRequest
     {
-        public string UserName { get; set; } = string.Empty;
+        public string UserMail { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
 }

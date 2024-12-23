@@ -474,6 +474,8 @@ C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\n
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\EHM_Survey_App.runtimeconfig.json
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\EHM_Survey_App.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\EHM_Survey_App.pdb
+C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\AutoMapper.dll
+C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Azure.Core.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Azure.Identity.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Humanizer.dll
@@ -503,7 +505,9 @@ C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\n
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Mono.TextTemplating.dll
+C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\QRCoder.dll
+C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\RestSharp.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Serilog.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Serilog.AspNetCore.dll
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Serilog.Extensions.Hosting.dll
@@ -692,5 +696,3 @@ C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\n
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\EHM_Survey_App.pdb
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\EHM_Survey_App.genruntimeconfig.cache
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\ref\EHM_Survey_App.dll
-C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\RestSharp.dll
-C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\Newtonsoft.Json.dll

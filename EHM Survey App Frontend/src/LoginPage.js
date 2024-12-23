@@ -3,37 +3,37 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      showError("Lütfen kullanıcı adı ve şifre giriniz.");
+    if (!email || !password) {
+      showError("Lütfen e-posta ve şifre giriniz.");
       return;
     }
   
     try {
       const response = await axios.post("http://localhost:5139/api/Login/login", {
-        username,
+        userMail: email,
         password,
       });
   
       if (response.data.success) {
-        const { userName, storeId } = response.data; // Backend'den dönen userName ve storeId
+        const { userMail, storeId } = response.data; // Backend'den dönen userMail ve storeId
         
         // localStorage'a kullanıcı verisini kaydedin
         localStorage.setItem(
           "userData",
-          JSON.stringify({ userName, storeId })
+          JSON.stringify({ userMail, storeId })
         );
   
         // Kullanıcıyı AdminPanel'e yönlendir
         navigate(`/admin-panel`);
       } else {
-        showError(response.data.message || "Kullanıcı adı veya şifre hatalı.");
+        showError(response.data.message || "E-posta veya şifre hatalı.");
       }
     } catch (err) {
       // Backend'den gelen hata mesajını kontrol et
@@ -61,17 +61,17 @@ const LoginPage = () => {
         <h2 style={styles.title}>Admin Paneli Giriş</h2>
         <div style={styles.inputGroup}>
           <input
-            type="text"
-            placeholder="User name"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="E-posta"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             style={styles.input}
           />
         </div>
         <div style={styles.inputGroup}>
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Şifre"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             style={styles.input2}
@@ -79,7 +79,7 @@ const LoginPage = () => {
         </div>
         {error && <p style={styles.error}>{error}</p>}
         <button onClick={handleLogin} style={styles.button}>
-          LOGIN
+          GİRİŞ YAP
         </button>
       </div>
     </div>

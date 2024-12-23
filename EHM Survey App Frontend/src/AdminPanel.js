@@ -6,7 +6,7 @@ const AdminPanel = () => {
 
   // Kullanıcı bilgilerini state'te tut
   const [userData, setUserData] = useState({
-    userName: "",
+    userMail: "",
     storeId: null,
   });
 
