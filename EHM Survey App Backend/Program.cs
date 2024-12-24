@@ -62,18 +62,18 @@ LogCleaner.CleanUpOldLogs("Logs", 3);
 
 var app = builder.Build();
 
-// QR Kod oluşturma işlemi
+// QR Kod oluşturma ve Hash işlemleri
 using (var scope = app.Services.CreateScope())
 {
     var qrCodeService = scope.ServiceProvider.GetRequiredService<QRCodeGeneratorService>();
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var passwordHasherService = scope.ServiceProvider.GetRequiredService<HashExistingPasswords>();
 
-    // Existing passwords hash'leme
+    // Şifreleri yalnızca hash'lenmemiş olanlar için hash'le
     try
     {
         await passwordHasherService.HashPasswordsAsync();
-        Console.WriteLine("Mevcut şifreler başarıyla hash'lenmiştir.");
+        Console.WriteLine("Hash işlemi başarıyla tamamlandı.");
     }
     catch (Exception ex)
     {

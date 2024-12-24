@@ -696,3 +696,4 @@ C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\n
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\EHM_Survey_App.pdb
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\EHM_Survey_App.genruntimeconfig.cache
 C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\obj\Debug\net9.0\ref\EHM_Survey_App.dll
+C:\Users\mehme\OneDrive\Masaüstü\Survey-App\EHM Survey App Backend\bin\Debug\net9.0\BCrypt.Net-Next.dll

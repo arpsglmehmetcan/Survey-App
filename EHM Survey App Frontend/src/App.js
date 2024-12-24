@@ -6,6 +6,7 @@ import SurveyEdit from './SurveyEdit';
 import LoginPage from './LoginPage';
 import AdminPanel from "./AdminPanel";
 import SurveyResults from "./SurveyResults";
+import UserEdit from './UserEdit';
 
 function App() {
   /*useEffect(() => {
@@ -76,6 +77,7 @@ function App() {
             <Route path="/survey-results" element={<SurveyResults />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/admin-panel" element={<AdminPanel />} />
+            <Route path="/user-edit" element={<UserEdit />} />
           </Routes>
         </main>
         <footer

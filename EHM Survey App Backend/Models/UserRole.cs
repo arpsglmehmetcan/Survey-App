@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,10 +16,8 @@ namespace EHM_Survey_App_Backend.Models
         public string UserMail { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Şifre girilmelidir.")]
-        public string Password { get; set; } = string.Empty;
+        public string Password { get; set; }
 
-        [Required]
-        [ForeignKey("Store")]
-        public int StoreId { get; set; }
+        public List<int> StoreIds { get; set; } = new List<int>(); // Birden fazla StoreId'yi tutmak için
     }
 }

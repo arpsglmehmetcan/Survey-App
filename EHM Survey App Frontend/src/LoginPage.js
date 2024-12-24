@@ -22,12 +22,12 @@ const LoginPage = () => {
       });
   
       if (response.data.success) {
-        const { userMail, storeId } = response.data; // Backend'den dönen userMail ve storeId
-        
+        const { userMail, storeIds } = response.data; // Backend'den dönen userMail ve storeIds
+  
         // localStorage'a kullanıcı verisini kaydedin
         localStorage.setItem(
           "userData",
-          JSON.stringify({ userMail, storeId })
+          JSON.stringify({ userMail, storeIds })
         );
   
         // Kullanıcıyı AdminPanel'e yönlendir
@@ -36,7 +36,6 @@ const LoginPage = () => {
         showError(response.data.message || "E-posta veya şifre hatalı.");
       }
     } catch (err) {
-      // Backend'den gelen hata mesajını kontrol et
       if (err.response && err.response.data && err.response.data.message) {
         showError(err.response.data.message);
       } else {
@@ -45,7 +44,6 @@ const LoginPage = () => {
       }
     }
   };
-  
 
   // Hata mesajını gösterip 3 saniye sonra silen fonksiyon
   const showError = (message) => {

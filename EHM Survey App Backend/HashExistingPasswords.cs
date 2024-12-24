@@ -18,10 +18,14 @@ namespace EHM_Survey_App_Backend
             var users = await _context.UserRole.ToListAsync();
             foreach (var user in users)
             {
-                if (!string.IsNullOrEmpty(user.Password))
+                // Eğer şifre zaten hashlenmişse (örneğin "$2b$" ile başlıyorsa), atla
+                if (!string.IsNullOrEmpty(user.Password) && user.Password.StartsWith("$2"))
                 {
-                    user.Password = PasswordHasher.HashPassword(user.Password);
+                    continue;
                 }
+                
+                // Hash işlemini sadece henüz hashlenmemiş şifreler için yap
+                user.Password = PasswordHasher.HashPassword(user.Password);
             }
             await _context.SaveChangesAsync();
         }

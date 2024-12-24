@@ -258,7 +258,7 @@ const SurveyEdit = () => {
           <option value="rating">Rating</option>
         </select>
         <textarea
-          placeholder="Seçenekler (virgülle ayrılmış)"
+          placeholder="Seçenekler bu formatta yazılmalı. [Evet,Hayır]"
           value={newQuestion.questionOptions}
           onChange={(e) =>
             setNewQuestion({ ...newQuestion, questionOptions: e.target.value })
